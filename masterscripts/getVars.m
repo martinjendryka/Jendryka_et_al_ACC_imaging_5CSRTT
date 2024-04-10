@@ -5,10 +5,6 @@ clear,close all,clc
 timebfevent = [0,0,4000,0]; %[ms]
 timeafevent = [7000,1000,7000,1000];%[ms]
 
-%%% set a fitting name for your output mat file reflecting your parameter
-%%% choice
-Params.matexportname = 'getVars_4sbf7saf';
-
 %% SET PARAMETERS ABOVE AS REQUIRED %%%%%%%%%%
 setparams % do not change these variables
 
@@ -120,7 +116,7 @@ for thisexp = 1:numel(explist)
         dpath = fullfile(dpath, 'getVars',explist{thisexp});
         mkdir(dpath)
         fprintf('exporting to mat file... \n')
-        save(fullfile(dpath ,[Params.matexportname '_' explist{thisexp},'.mat']),'Params','infovar','beh',...
+        save(fullfile(dpath ,['getVars_4sbf7saf' '_' explist{thisexp},'.mat']),'Params','infovar','beh',...
             'eventepochsAll','eventepochsAll_pokes','eventlistAll');
         fprintf('Experiment %s done \n',explist{thisexp})
         clearvars -except explist Params thisexp

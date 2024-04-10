@@ -4,15 +4,15 @@
 
 currDir = pwd;
 [~,lastfolder,~] = fileparts(currDir);
-if strcmp(lastfolder,'manuscript')
+if strcmp(lastfolder,'Jendryka_et_al_ACC_imaging_5CSRTT')
     addpath(genpath(currDir))
 else
-    fprintf('Run script from within manuscript repo \n')
+    fprintf('Run script from within Jendryka_et_al_ACC_imaging_5CSRTT repo \n')
     fprintf('Exiting...')
     return
 end
 
-userpath(fileread('/Users/martinjendryka/Research/Projects/miniscope5csrtt/repo/miniscope5csrtt_final/userpath.txt'))
+userpath(fileread('userpath.txt'))
 %% create folders where raw data is saved
 
 expnames = {'varITILong','cb800ms','cbDeval1','cbExt1','cbExt2'};

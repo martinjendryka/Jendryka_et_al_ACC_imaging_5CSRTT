@@ -10,7 +10,13 @@ dpath = fullfile(dpath,'Fig2');
 rewlat = beh.rewlat;
 
 for thisarea = 1:numel(Params.brainareas)
-    
+    animalselect = find(ismember(infovar.brainareas,Params.brainareas(thisarea)));
+    ncells = infovar.ncells(animalselect);
+    sesid = repelem(animalselect,ncells); % tells me from which session each cell comes from
+   
+    cell_id_ses = arrayfun(@(n) 1:n, ncells, 'UniformOutput', false);
+    cell_id_ses = cat(2,cell_id_ses{:});
+
     clusterid = clusters.clusterid{thisarea}(:,3);
     cellid = clusters.cellid{thisarea}(:,3);
     sesid = epochSessionid{thisarea};
