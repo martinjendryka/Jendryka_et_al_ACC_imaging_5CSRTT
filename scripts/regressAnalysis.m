@@ -1,6 +1,10 @@
 explist = {'varITILong'};
 loadmatname = 'getVars_4sbf7saf'; % mat file of descr Analysis
-
+if dopredmerge
+    exportname='regressAnalysisPredmerged';
+else
+    exportname = 'regressAnalysis';
+end
 for thisexp = 1:numel(explist)
     thisexpname = explist{thisexp}; % data from which challenge to load
     dpath = Choosesavedir('outputvars');
@@ -48,7 +52,7 @@ for thisexp = 1:numel(explist)
     end %   FOR LOOP END through each session
 
     regressvar.cpd = cpd;
-    save(fullfile(dpath,['regressAnalysis_', extractAfter(loadmatname,'_'),'_',thisexpname '.mat']),'Params','regressvar');
+    save(fullfile(dpath,[exportname, '_', extractAfter(loadmatname,'_'),'_',thisexpname '.mat']),'Params','regressvar');
     fprintf('Experiment %s done \n',thisexpname)
     clearvars -except loadmatname explist thisexp
 end
