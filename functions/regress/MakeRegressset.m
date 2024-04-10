@@ -8,8 +8,6 @@ function [X,y,Params,labels] = MakeRegressset(Params,eventepochs,numevents,pokes
 %poke5_premature	1	        -1	            -1	            0	            -0.25	        -1
 %omission		    -1	        0	            0	            0	                0	        -1
 
-Params.predstrs = {'activePoke/omission','spatialLocation1','spatialLocation2','spatialLocation3','spatialLocation4','rewarded(correct)Response'};
-
 numpred = numel(Params.predstrs);
 y = {};
 labels = repelem(Params.trialtypes',numevents);

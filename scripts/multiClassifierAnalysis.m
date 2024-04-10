@@ -1,8 +1,9 @@
-clear,close all,clc
-
 loadmatname = 'getVars_4sbf7saf'; %SET ACCORDING TO PREVIOUS SCRIPT
-
-% explist = {'varITILong','cb800ms','cbDeval1','cbExt1','cbExt2','mixedChalls'};
+if includecorrectsonly 
+    exportname = 'multiClassifier';
+else
+    exportname='multiClassifierOnlyCorrects';
+end
 explist = {'varITILong'};
 for thisexp = 1:numel(explist)
     %% LOAD MAT FILE: descrAnalysis.mat
@@ -13,7 +14,7 @@ for thisexp = 1:numel(explist)
 
     %%% dont change these parameters
     Params.dosmote = 1;
-    Params.MLiterations = 2;
+    Params.MLiterations = 100;
     Params.ratio = 0.2;
     Params.smoteNeighbors = 4;
     Params.mineventsClass = 6; % minimum trial number for one eventtype
@@ -40,7 +41,9 @@ for thisexp = 1:numel(explist)
         %%% Make sets and setlabels
         thisset = TransformTrace_multi(Params,eventepochs,numpokes);
         setlabel = vertcat(numpokes{:});
-        %setlabel = numpokes{1}; % if to only include corrects, change the
+        if includecorrectsonly
+            setlabel = numpokes{1};
+        end
         % file name accordingly in line 79
         %%% Run classifier
         [pdecod_thisses, fscore_thisses, beta_thisses,~,~,auc_thisses] = ...
@@ -76,7 +79,7 @@ for thisexp = 1:numel(explist)
     classifier.aucShuffled = aucShuffled;
 
     dpath = Choosesavedir('outputvars');
-    dpath = fullfile(dpath, 'multiclassifier', thisexpname,['multiClassifier_',extractAfter(loadmatname,'_')]);
+    dpath = fullfile(dpath, 'multiclassifier', thisexpname,[exportname,extractAfter(loadmatname,'_')]);
     mkdir(dpath)
     save(fullfile([dpath,'.mat']),'Params','classifier');
     fprintf('Experiment %s done \n',thisexpname)

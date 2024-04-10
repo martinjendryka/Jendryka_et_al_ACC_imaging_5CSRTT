@@ -1,4 +1,3 @@
-explist = {'varITIlong'};
 
 for thisexp = 1:numel(explist)
     %% load mat file

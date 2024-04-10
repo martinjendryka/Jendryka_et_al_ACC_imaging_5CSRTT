@@ -1,14 +1,14 @@
 %% add dir name of behavioral file to datalist
 % only one file for each animal must be in the date
 % folder,
-function list = behavFiles(inputList,behav)
+function list = BehavFiles(inputList,behav)
 % select folder behavior when window opens
 
 animalPFC = ["8264","8271","8390","8394","8396","8400","6982","6983","6984",...
     "6985","B041","B043","B585","B611"];
 animalACC = ["B013","8062","8592","6965","6997","A539","6998","A648","6964","6961","6963",...
     "A539","A602","A648","8263","8389","8393","8401","6964","6962","6963","1805",...
-    "1804","1802","8503","8504","8508","8592","6998","6961"]; % for all these animals histo was checked
+    "1804","1802","8503","8504","8508","8592","6998","6961"]; 
 animalCg1= [];
 animalCg2= [];
 
@@ -30,9 +30,9 @@ for i = 1: length(inputList(:,1))
         inputList(i,5) = {behavfile};
         % add brain area
         if ismember(thisanimal,animalPFC)
-            inputList(i,6) = {'prelimbic'};
+            inputList(i,6) = {'mPFC'};
         elseif ismember(thisanimal,animalACC)
-            inputList(i,6) = {'cingulate'};
+            inputList(i,6) = {'ACC'};
         else
             error(['no brainarea for animal' thisanimal])
         end

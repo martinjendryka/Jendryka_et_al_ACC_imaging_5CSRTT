@@ -1,4 +1,4 @@
-function cpdAll = LinearRegress(x,yAll,Params,numcells,labels)
+function cpdAll = LinearRegressPredmerged(x,yAll,Params,numcells,labels)
 
 cpdAll = cell(1,numel(Params.epochtypes));
 numpred = numel(Params.predstrs);
@@ -23,7 +23,14 @@ for thisepochtype = 1:numel(Params.epochtypes)
 
             for thispred = 1:numpred
                 x_i= x;
-                x_i(:,thispred) = []; % remove single predictor to calculate reduced model
+
+                if isequal(thispred,2)
+                    x_i(:,2:5) = [];
+                elseif ismember(thispred,3:5)
+                    continue
+                else
+                    x_i(:,thispred) = []; % remove single predictor to calculate reduced model
+                end
 
                 [~,mdlRed] = lasso(x_i,thisy,'Intercept',true,'CV',10);
                 MSE_red= mdlRed.MSE(mdlRed.IndexMinMSE);

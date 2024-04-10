@@ -1,20 +1,17 @@
-clear,clc
-
 %% SET ACCORDING TO PREVIOUS SCRIPT
 loadmatname = 'getVars_4sbf7saf';
 
-% explist = {'varITILong','cb800ms','cbDeval1','cbExt1','cbExt2','mixedChalls'};
-explist = {'cb800ms','cbDeval1','cbExt1','cbExt2'};
+explist = {'varITILong','mixedChalls'};
 
 for thisexp = 1:numel(explist)
-    %% LOAD MAT FILE: descrAnalysis.mat
+    
     thisexpname = explist{thisexp};
     dpath = Choosesavedir('outputvars');
     dpath = fullfile(dpath, 'getVars', thisexpname);
     load(fullfile(dpath, [loadmatname '_' thisexpname '.mat'])) %
 
     %%% dont change these parameters
-    Params.MLiterations = 2;
+    Params.MLiterations = 100;
     Params.ratio = 0.2; % 20% of trials make up test set
     Params.smoteNeighbors = 4; % number of neigbors SMOTE function uses for over-sampling events from minority class
     Params.mineventsClass = 6; % minimum trial number for one eventtype

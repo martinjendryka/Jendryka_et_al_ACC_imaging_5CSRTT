@@ -1,5 +1,5 @@
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% DO NOT CHANGE VARIABLES BELOW %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Params.brainareas = {'cingulate','prelimbic'};
+Params.brainareas = {'ACC','mPFC'};
 Params.trialtypes = {'correct', 'incorrect','omission', 'premature' };
 Params.poketypes = {'poke_1','poke_2','poke_3','poke_4','poke_5'};
 Params.responsetypes = {'correct', 'incorrect','omission', 'premature', 'reward' };
@@ -31,12 +31,10 @@ Params.MLiterations = [];
 Params.ratio = [];
 
 Params.trialcombs = flip(combnk(1:numel(Params.trialtypes),2));
-Params.classifierlbls = {'SVMlinear','SVMlinearopti','SVMfinegaussian',...
-    'SVMmediumgaussian','SVMcoarsegaussian','SVMcubic',...
-    'SVMquadratic','treeBagged','treeFine','treeMedium','treeCoarse',...
-    'KNNfine','KNNmedium','KNNcoarse','KNNcosine','KNNcubic',...
-    'KNNsubspace','KNNweighted','neuralnetNarrow','neuralnetMedium',...
-    'neuralnetWide','neuralnetBilayered','neuralnetTrilayered',...
-    'discriminantSubspace','discriminantQuadratic',...
-    'naivebayesGaussian','naivebayesKernel','kernelSVM','kernelLogisticregress'};
+
+%% linear regression
+Params.predstrs = {'activePoke/omission','spatialLocation1','spatialLocation2','spatialLocation3','spatialLocation4','rewarded(correct)Response'};
+Params.lasso_CV = 10; % k-fold cross-validation of lasso regression
+Params.sampling_iterations = 100; % iterations for repeating downsampling of baseline challenge to devaluation experiments 
+
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% DO NOT CHANGE VARIABLES ABOVE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

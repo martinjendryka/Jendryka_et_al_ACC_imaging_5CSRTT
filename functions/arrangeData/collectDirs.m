@@ -1,5 +1,5 @@
 % select miniscope folder in popup window
-function list = collectDirs(thispath)
+function list = CollectDirs(thispath)
 
 delete(fullfile(thispath,'.DS_Store'));
 

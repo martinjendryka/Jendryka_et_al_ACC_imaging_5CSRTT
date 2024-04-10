@@ -1,6 +1,3 @@
-clear,close all,clc
-
-%% SET PARAMETERS BELOW AS REQUIRED %%%%%%%%%%
 %%% select times before and after each event (i.e. iti, cue, choice and outcome) for signal extraction
 timebfevent = [0,0,4000,0]; %[ms]
 timeafevent = [7000,1000,7000,1000];%[ms]
@@ -9,8 +6,7 @@ timeafevent = [7000,1000,7000,1000];%[ms]
 setparams % do not change these variables
 
 %% set the experiments you want to process
-% explist = {'varITILong','cb800ms','cbDeval1','cbExt1','cbExt2','mixedChalls'};
-explist = {'varITILong'};
+explist = {'varITILong','cb800ms','cbDeval1','cbExt1','cbExt2','mixedChalls'};
 
 for thisexp = 1:numel(explist)
     %%% get files for loading

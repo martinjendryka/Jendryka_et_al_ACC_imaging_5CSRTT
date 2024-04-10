@@ -1,8 +1,5 @@
 %%% %% generate mat file for each animal and for each experiment
-%% important notes !!!
-% first run createDatabase_v3 to generate mat file with data for every experiment and animal
-%==========================================================================
-function exportSglSes(varlist2,eventlist2,dpath)
+function ExportSglSes(varlist2,eventlist2,dpath)
 ex = varlist2;
 ex2 = eventlist2;
 % clear varlist eventlist
