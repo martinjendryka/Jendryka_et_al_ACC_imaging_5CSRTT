@@ -1,4 +1,4 @@
-# Jendryka_et_al_bioRxiv_2024
+# Jendryka_et_al_ACC_imaging_5CSRTT
 how to use repository
 1. clone repository to desired folder using git clone https://github.com/martinjendryka/Jendryka_et_al_ACC_imaging_5CSRTT.git or download the repository as a zip file from Github.com
 2. Create a new folder where the data and results (pdf, excel and mat files) will be stored. In  the following this folder is referred to as the dataResults folder 
