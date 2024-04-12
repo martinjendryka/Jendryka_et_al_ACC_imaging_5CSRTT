@@ -20,8 +20,8 @@ for thisarea = 1:numel(Params.brainareas) % for-loop start through brainareas
     rewlat = median(vertcat(beh.rewlat{ismember(varlist.brainareas,Params.brainareas(thisarea))}),1,'omitnan'); % get the median reward latency for each session
 
     % get sorting indices corresponding to cluster id and peak latency
-    thiscluster = clusters.clusterid{thisarea}(:,3,selectTrialtype);
-    clustersortidx = clusters.cellid{thisarea}(:,3,selectTrialtype);
+    thiscluster = clusters.clusterid{thisarea}(:,1,3);
+    clustersortidx = clusters.cellid{thisarea}(:,1,3);
     ncellsCluster = groupcounts(thiscluster);
     epochs_avgOdd = [];
     for thisses = animalselect

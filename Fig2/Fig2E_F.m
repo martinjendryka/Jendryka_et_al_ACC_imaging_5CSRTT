@@ -11,7 +11,7 @@ dpath = Choosesavedir('figs');
 dpath = fullfile(dpath,'Fig2');
 rewlat = beh.rewlat; % reward latencies
 
-example_cells = [116,32,430,97;
+example_cells = [32,430,116,97;
     45,167,141,84]; % example cells as shown in Fig.2E,F
 numframes = Params.frames.num(thisepochtype);
 bfeventframes = Params.frames.bfevent(thisepochtype);

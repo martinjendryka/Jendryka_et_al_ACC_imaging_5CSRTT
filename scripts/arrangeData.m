@@ -31,7 +31,7 @@ for i = 1:numel(explist)
     dpath = fullfile(dpath, 'arrangedData', thisexpname{1});
     mkdir(dpath)
 
-    exportSglSes(varlist,eventlist,dpath)
+    ExportSglSes(varlist,eventlist,dpath)
     fprintf('Experiment %s done \n',explist{i})
     clearvars -except explist datalist thisexpname thispath_scope
 

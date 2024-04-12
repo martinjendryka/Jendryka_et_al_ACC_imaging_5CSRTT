@@ -1,5 +1,6 @@
 
 explist = {'varITI'};
+
 for thisexp = 1:numel(explist)
     %% load mat file
     thisexpname = explist{thisexp}; % data from which challenge to load
