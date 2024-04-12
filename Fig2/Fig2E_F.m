@@ -108,7 +108,7 @@ for thisarea = 1:numel(Params.brainareas) % for-loop through brain areas
         axes(ax(i,4))
         xlims = get(ax(i,4), 'XLim');
         ylims = get(ax(i,4), 'YLim');
-        text(xlims(2) + (diff(xlims) * 0.05), mean(ylims), ['cellID ' num2str(example_cells(thisarea,i)), ' cluster' num2str(cluster_exampleCells(i))], 'Rotation', 270,'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom');
+        text(xlims(2) + (diff(xlims) * 0.05), mean(ylims), ['cellID ' num2str(example_cells(thisarea,i))], 'Rotation', 270,'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom'); % ' cluster' num2str(cluster_exampleCells(i))
 
         for ii = 1:numel(Params.trialtypes)
             set(ax(i,ii),'Box','off')
