@@ -12,7 +12,7 @@ function Fig2A_B(Params,infovar,eventepochs, thisepochtype)
 %%% set directory for storing figures
 dpath = Choosesavedir('figs');
 dpath = fullfile(dpath, 'Fig2');
- 
+mkdir(dpath)
 numframes = Params.frames.num(thisepochtype);
 bfeventframes = Params.frames.bfevent(thisepochtype);
 afeventframes = Params.frames.afevent(thisepochtype);

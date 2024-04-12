@@ -1,7 +1,7 @@
 %%% Fig. 4 Activity in the ACC represents spatial action selection
 %%% Martin Jendryka, 2024
 
-thisexpname = 'varITILong';
+thisexpname = 'varITI';
 %% Fig.4A-C
 dpath = Choosesavedir('outputvars');
 dpath2 = fullfile(dpath, 'getVars', thisexpname);
@@ -13,8 +13,8 @@ Fig4A_B_C(Params,infovar,eventepochsAll_pokes,epochtype)
 
 %% Fig.4D
 dpath = Choosesavedir('outputvars');
-load(fullfile(dpath,'multiclassifier', thisexpname , ['multiClassifier_4sbf7saf' '.mat'])) % mat file created by classifier script loaded 
+load(fullfile(dpath,'multiclassifier', thisexpname , ['multiClassifier_4sbf7saf' '_' thisexpname '.mat'])) % mat file created by classifier script loaded 
 classifier_alltrials = classifier;
-load(fullfile(dpath,'multiclassifier', thisexpname , ['multiClassifierOnlyCorrects_4sbf7saf' '.mat'])) % mat file created by classifier script loaded 
+load(fullfile(dpath,'multiclassifier', thisexpname , ['multiClassifierOnlyCorrects_4sbf7saf' '_' thisexpname '.mat'])) % mat file created by classifier script loaded 
 classifier_corrects= classifier;
 Fig4D(Params,infovar,classifier_alltrials,classifier_corrects,beh,epochtype)

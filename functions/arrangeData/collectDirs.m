@@ -23,6 +23,6 @@ for i = 1:numel(d)
     animal = namesplit(:,3);
     dates = namesplit(:,4);
     rectime = namesplit(:,5);
-    list = [list; tracesdir',namesplit(:,3),namesplit(:,4),namesplit(:,2)]; % dir_calciumfile | animal_id | date | experiment name
+    list = [list; tracesdir',namesplit(:,3),namesplit(:,4),namesplit(:,2),repelem(cellstr(expname),size(namesplit,1),1)]; % dir_calciumfile | animal_id | date | experiment name
 end
 end

@@ -101,7 +101,11 @@ for thiscomb = [2,3]
     xticklabels(-bfeventframes*timebinlength/1000:afeventframes*timebinlength/1000)
     ylim([0,120])
     yticks(0:20:100)
-    setFig
+    set(gca,'fontname','arial')
+    set(gca,'linewidth',1.4)
+    set(gca,'fontsize',12)
+    set(gca,'TickDir','out');
+    set(gca,'box','off')
     xlabel('Time (s)')
     ylabel('Decoding Accuracy (%)')
 

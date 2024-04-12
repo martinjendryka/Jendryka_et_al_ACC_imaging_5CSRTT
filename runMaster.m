@@ -1,4 +1,6 @@
-explist = {'varITIlong'};
+add2path
+
+explist = {'varITI','cb800ms','cbExt1','cbExt2','cbDeval1','mixedChalls'};
 
 %% 1. arrange the raw data into a mat file 
 arrangeData
@@ -16,6 +18,7 @@ clusteringAnalysis
 fig2
 
 %% Binary classification 
+epochtype= [1,3];
 binaryClassifierAnalysis
 
 %% Fig. 3 Decoding of behavioral choice from population activity in ACC and mPFC
@@ -23,6 +26,7 @@ fig3
 
 %% Multi-classification of poke hole 
 includecorrectsonly = 0;
+epochtype=3;
 multiClassifierAnalysis
 includecorrectsonly = 1;
 multiClassifierAnalysis

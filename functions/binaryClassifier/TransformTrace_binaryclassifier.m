@@ -7,7 +7,7 @@ for thisepochtype = 1:numel(Params.epochtypes)
     
     setlabel = repelem(Params.trialtypes',numevents); % repeats trialtypes names corresponding to event number (if 0 will be not repeated)
     
-    dataset = catpad(3,eventepochs{:,thisepochtype});    % concat traces of trials
+    dataset = cat(3,eventepochs{:,thisepochtype});    % concat traces of trials
     dataset = permute(dataset,[3,2,1]);   % re-arrange array -> numevents x numbins x numcells
     nanrow = all(isnan(dataset),[2,3]);  % find nan rows corresponding to trialtypes with no events
     dataset(nanrow,:,:) = [];

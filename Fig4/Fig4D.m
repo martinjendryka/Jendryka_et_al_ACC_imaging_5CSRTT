@@ -49,7 +49,8 @@ for thisarea = 1:numel(Params.brainareas)
     pdecod_epoch = pdecod_alltrials(thisepochtype,animalselect); %  timebins X iterations
     emptyses =  cell2mat(cellfun(@(x) isempty(x),pdecod_epoch,'UniformOutput',false));
     animalselect_noempty = animalselect(~emptyses); % remove empty cells
-    rewlat = median(vertcat(beh.rewlat{animalselect_noempty}),1,'omitnan');
+    rewlat = cellfun(@(x) median(x,1,'omitnan'),beh.rewlat(animalselect_noempty),'UniformOutput',false);
+    rewlat = median(cat(1,rewlat{:}),1);
     pdecod_epoch = pdecod_alltrials(thisepochtype,animalselect_noempty); %  timebins X iterations
     pdecod_epochShuffled = pdecodShuffled_alltrials(thisepochtype,animalselect_noempty); %  timebins X iterations
 
@@ -157,16 +158,16 @@ for thisarea = 1:numel(Params.brainareas)
     lat3 = nan;
 
     if thisepochtype == 3
-        resplat = median(catpad(2,beh.resplat{1,...
-            ismember(varlist.brainareas,Params.brainareas(thisarea))}),[1,2],'omitnan');
-
+        resplat = cellfun(@(x) median(x,'omitnan'),beh.resplat(1,animalselect_noempty),'UniformOutput',false);
+        resplat = median(cell2mat(resplat));
+     
         lat1 = resplat;
         lat2 = rewlat(1);
         lat3 = lat2 + rewlat(2);
 
     elseif thisepochtype == 1
-        resplat = median(catpad(2,beh.resplat{4,...
-            ismember(varlist.brainareas,Params.brainareas(thisarea))}),[1,2],'omitnan');
+           resplat = cellfun(@(x) median(x,'omitnan'),beh.resplat(4,animalselect_noempty),'UniformOutput',false);
+        resplat = median(cell2mat(resplat));
         lat1= resplat;
     end
 

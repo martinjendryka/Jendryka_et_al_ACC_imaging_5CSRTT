@@ -11,7 +11,7 @@ for thisexp = 1:numel(explist)
     load(fullfile(dpath, [loadmatname '_' thisexpname '.mat'])) %
 
     %%% dont change these parameters
-    Params.MLiterations = 100;
+    Params.MLiterations = 2;
     Params.ratio = 0.2; % 20% of trials make up test set
     Params.smoteNeighbors = 4; % number of neigbors SMOTE function uses for over-sampling events from minority class
     Params.mineventsClass = 6; % minimum trial number for one eventtype
@@ -43,7 +43,7 @@ for thisexp = 1:numel(explist)
         %%% Run classifier
          
         [pdecod_thisses, fscore_thisses, beta_thisses,~,~,auc_thisses] = ...
-            Mybinaryclassifier(thisset,setlabel,Params,infovar,thisses,0); % with true labels
+            Mybinaryclassifier(thisset,setlabel,Params,infovar,thisses,epochtype,0); % with true labels
 
         pdecod(:,:,thisses) = pdecod_thisses;
         fscore(:,:,thisses) = fscore_thisses;
@@ -51,7 +51,7 @@ for thisexp = 1:numel(explist)
         auc(:,:,thisses)=auc_thisses;
 
         [pdecod_thisses, fscore_thisses, beta_thisses,~,~,auc_thisses] =  ... % with shuffled labels
-        Mybinaryclassifier(thisset,setlabel,Params,infovar,thisses,1);
+        Mybinaryclassifier(thisset,setlabel,Params,infovar,thisses,epochtype,1);
 
         pdecodShuffled(:,:,thisses) = pdecod_thisses;
         fscoreShuffled(:,:,thisses) = fscore_thisses;
@@ -76,5 +76,5 @@ for thisexp = 1:numel(explist)
     mkdir(dpath)
     save(fullfile([dpath ,'.mat']),'Params','classifier');
     fprintf('Experiment %s done \n',thisexpname)
-    clearvars -except loadmatname explist
+    clearvars -except loadmatname explist epochtype
 end

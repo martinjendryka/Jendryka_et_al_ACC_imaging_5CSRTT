@@ -1,10 +1,10 @@
-function cpdAll = LinearRegressPredmerged(x,yAll,Params,numcells,labels)
+function cpdAll = LinearRegressPredmerged(x,yAll,Params,numcells,labels,epochtype)
 
 cpdAll = cell(1,numel(Params.epochtypes));
 numpred = numel(Params.predstrs);
 xOR = x;
 
-for thisepochtype = 1:numel(Params.epochtypes)
+for thisepochtype = epochtype
     y = yAll{thisepochtype};
     x = xOR;
     if thisepochtype == 2 % no prematures in cue epoch

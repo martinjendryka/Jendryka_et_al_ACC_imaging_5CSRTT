@@ -3,30 +3,29 @@
 % is upsampled using SMOTE, SVM classifier
 %%
 function  [pdecodAll, fscoreAll,betaAll,fprAll,tprAll,aucAll] = ...
-    Mybinaryclassifier(set,setlabel,Params,info,thisses,doshuffle)
+    Mybinaryclassifier(set,setlabel,Params,info,thisses,epochtype,doshuffle)
 
-setvarsforfunc
 ncells = info.ncells(thisses);
 animal = info.animals{thisses};
 
 %% pre-set output variables
-pdecodAll = cell(numel(epochtypes),size(trialcombs,1));
-fscoreAll = cell(numel(epochtypes),size(trialcombs,1));
-fprAll = cell(numel(epochtypes),size(trialcombs,1));
-tprAll = cell(numel(epochtypes),size(trialcombs,1));
-aucAll= cell(numel(epochtypes),size(trialcombs,1));
-betaAll = cell(numel(epochtypes),size(trialcombs,1));
+pdecodAll = cell(numel(Params.epochtypes),size(Params.trialcombs,1));
+fscoreAll = cell(numel(Params.epochtypes),size(Params.trialcombs,1));
+fprAll = cell(numel(Params.epochtypes),size(Params.trialcombs,1));
+tprAll = cell(numel(Params.epochtypes),size(Params.trialcombs,1));Params.trialtypes
+aucAll= cell(numel(Params.epochtypes),size(Params.trialcombs,1));
+betaAll = cell(numel(Params.epochtypes),size(Params.trialcombs,1));
 
 k = Params.smoteNeighbors; % number of neighbors for used in SMOTE
 
-for thisepochtype = 1:numel(epochtypes)
+for thisepochtype = epochtype 
     numframes = Params.frames.num(thisepochtype);
 
-    for thisbinaryclassifier = 1: size(trialcombs,1)
+    for thisbinaryclassifier = 1: size(Params.trialcombs,1)
         if ismember(thisepochtype,2) && any(ismember(thisbinaryclassifier,[3,5,6])) % combs with prematures in cue phase
             continue
         end
-        classlbls = trialtypes(trialcombs(thisbinaryclassifier,:));
+        classlbls = Params.trialtypes(Params.trialcombs(thisbinaryclassifier,:));
         onlyclasslbls = ismember(setlabel,classlbls);
         y = setlabel(onlyclasslbls);
 
@@ -49,7 +48,7 @@ for thisepochtype = 1:numel(epochtypes)
         %%% check if animal has minimum of required events per class, if
         %%% not, skip
         if numel(ymajor)<Params.mineventsClass || numel(yminor)<Params.mineventsClass
-            sprintf('not enough %s events ( %d ) for test set for animal %s',char(trialtypes(minorclassid)),numevents(minorclassid),animal)
+            sprintf('not enough %s events ( %d ) for test set for animal %s',char(Params.trialtypes(minorclassid)),numevents(minorclassid),animal)
             continue
         end
 
@@ -193,11 +192,11 @@ for thisepochtype = 1:numel(epochtypes)
                 auc(:,thistimebin,i) = thisauc;
             end
             if doshuffle
-                curr_i_string = [' Classifying Permutation Session ' animal ' ' char(epochtypes(thisepochtype)) ' ' classlbls{1} '-' classlbls{2} ' for timebin ' num2str(thistimebin) ' : ' num2str(Params.MLiterations) ' iterations' ];
+                curr_i_string = [' Classifying Permutation Session ' animal ' ' char(Params.epochtypes(thisepochtype)) ' ' classlbls{1} '-' classlbls{2} ' for timebin ' num2str(thistimebin) ' : ' num2str(Params.MLiterations) ' iterations' ];
                 fprintf([curr_i_string '\n']);
 
             else
-                curr_i_string = [' Classifying Session ' animal ' ' char(epochtypes(thisepochtype)) ' ' classlbls{1} '-' classlbls{2} ' for timebin ' num2str(thistimebin)  ' : ' num2str(Params.MLiterations) ' iterations'];
+                curr_i_string = [' Classifying Session ' animal ' ' char(Params.epochtypes(thisepochtype)) ' ' classlbls{1} '-' classlbls{2} ' for timebin ' num2str(thistimebin)  ' : ' num2str(Params.MLiterations) ' iterations'];
                 fprintf([curr_i_string '\n']);
             end
         end

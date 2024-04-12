@@ -1,4 +1,4 @@
-explist = {'varITILong'};
+explist = {'varITI'};
 loadmatname = 'getVars_4sbf7saf'; % mat file of descr Analysis
 if dopredmerge
     exportname='regressAnalysisPredmerged';
@@ -28,7 +28,7 @@ for thisexp = 1:numel(explist)
         eventepochs = eventepochsAll{thisses};
         numevents = beh.numevents(:,thisses);
         pokes = beh.pokes(:,thisses);
-        numpokes = beh.pokesnum{thisses};
+        numpokes = beh.pokesnum(:,:,thisses);
         numcells = ncells(thisses);
         thisregion = brainareasAll(thisses);
         setlabel = repelem(Params.trialtypes',numevents); % repeats trialtypes names corresponding to event number (if 0 will be not repeated)

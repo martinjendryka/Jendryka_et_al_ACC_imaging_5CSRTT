@@ -4,7 +4,7 @@ if includecorrectsonly
 else
     exportname='multiClassifierOnlyCorrects';
 end
-explist = {'varITILong'};
+explist = {'varITI'};
 for thisexp = 1:numel(explist)
     %% LOAD MAT FILE: descrAnalysis.mat
     thisexpname = explist{thisexp};
@@ -14,7 +14,7 @@ for thisexp = 1:numel(explist)
 
     %%% dont change these parameters
     Params.dosmote = 1;
-    Params.MLiterations = 100;
+    Params.MLiterations = 2;
     Params.ratio = 0.2;
     Params.smoteNeighbors = 4;
     Params.mineventsClass = 6; % minimum trial number for one eventtype
@@ -39,7 +39,7 @@ for thisexp = 1:numel(explist)
 
         %%% supervised machine-learning using classifier
         %%% Make sets and setlabels
-        thisset = TransformTrace_multi(Params,eventepochs,numpokes);
+        thisset = TransformTrace_multi(Params,eventepochs);
         setlabel = vertcat(numpokes{:});
         if includecorrectsonly
             setlabel = numpokes{1};
@@ -47,7 +47,7 @@ for thisexp = 1:numel(explist)
         % file name accordingly in line 79
         %%% Run classifier
         [pdecod_thisses, fscore_thisses, beta_thisses,~,~,auc_thisses] = ...
-            Mymulticlassifier(thisset,setlabel,Params,infovar,thisses,numevents,0); % with true labels
+            Mymulticlassifier(thisset,setlabel,Params,infovar,thisses,numevents,epochtype,0); % with true labels
 
         pdecod(:,thisses) = pdecod_thisses;
         fscore(:,thisses) = fscore_thisses;
@@ -55,7 +55,7 @@ for thisexp = 1:numel(explist)
         auc(:,thisses)=auc_thisses;
 
         [pdecod_thisses, fscore_thisses, beta_thisses,~,~,auc_thisses] =  ... % with shuffled labels
-            Mymulticlassifier(thisset,setlabel,Params,infovar,thisses,numevents,1);
+            Mymulticlassifier(thisset,setlabel,Params,infovar,thisses,numevents,epochtype,1);
 
         pdecodShuffled(:,thisses) = pdecod_thisses;
         fscoreShuffled(:,thisses) = fscore_thisses;
@@ -79,8 +79,9 @@ for thisexp = 1:numel(explist)
     classifier.aucShuffled = aucShuffled;
 
     dpath = Choosesavedir('outputvars');
-    dpath = fullfile(dpath, 'multiclassifier', thisexpname,[exportname,extractAfter(loadmatname,'_')]);
-    mkdir(dpath)
+    dpath = fullfile(dpath, 'multiclassifier', thisexpname,[exportname,'_',extractAfter(loadmatname,'_'),'_',thisexpname]);
+    mkdir(fileparts(dpath))
     save(fullfile([dpath,'.mat']),'Params','classifier');
     fprintf('Experiment %s done \n',thisexpname)
+    clearvars -except loadmatname explist epochtype includecorrectsonly
 end

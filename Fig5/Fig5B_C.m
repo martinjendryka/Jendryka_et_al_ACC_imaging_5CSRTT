@@ -30,31 +30,29 @@ colorlines = [0,0,1;...
 
 for thisarea = 1:numel(Params.brainareas)
     animalselect = find(ismember(varlist.brainareas,Params.brainareas(thisarea)));
-    cpdbrain = regressvar.cpd(animalselect);
+    cpdbrain = regressvar.cpd(thisepochtype,animalselect);
     emptycells = cell2mat(cellfun(@(x) isempty(x),cpdbrain,'UniformOutput',false));
     animalselect(emptycells) = [];
     cpdbrain(emptycells) = [];
     animals = varlist.animals(animalselect);
 
-    rewlat = median(vertcat(beh.rewlat{animalselect}),1,'omitnan');
+    rewlat = cellfun(@(x) median(x,1,'omitnan'),beh.rewlat(animalselect),'UniformOutput',false);
+    rewlat = median(cat(1,rewlat{:}),1);
+
     brainls = varlist.brainareas(animalselect);
     task = varlist.task(animalselect);
     tblexport = table(animals',task',brainls');
 
     figure
    
-    thiscpd = cellfun(@(x) x{thisepochtype},cpdbrain,'UniformOutput',false);
-    if unique(cell2mat(cellfun(@(x) isempty(x),thiscpd,'UniformOutput',false)))
-        continue
-    end
-    cpdMean_cells = cellfun(@(x) squeeze(mean(x,2)),thiscpd,'UniformOutput',false); % mean across cells
+    cpdMean_cells = cellfun(@(x) squeeze(mean(x,2)),cpdbrain,'UniformOutput',false); % mean across cells
 
     hold on
     pvals = [];
     d = 0;
     cpdMeanPredAll =[];
 
-    for thispred = 1:numpred
+    for thispred = [1,2,6]
 
         cpdMeanPred = cellfun(@(x) x(thispred,:),cpdMean_cells,'UniformOutput',false); % get CPD vals for one predictor for all animals for each time bin
         cpdMeanPred = cell2mat(cpdMeanPred');
@@ -64,12 +62,7 @@ for thisarea = 1:numel(Params.brainareas)
         cpdMeanPredAll = cat(3,cpdMeanPredAll,cpdMeanPred);
         tbl = [tblexport,array2table(cpdMeanPred)];
 
-        if isequal(thispred,numpred+1)
-            writetable(tbl,fullfile(dpathexcel,['rawfig9_',Params.brainareas{thisarea},'.xlsx']),'Sheet','R2_intercept')
-
-        else
-            writetable(tbl,fullfile(dpathexcel,['rawfig9_',Params.brainareas{thisarea},'.xlsx']),'Sheet',Params.predstrs{thispred})
-        end
+        writetable(tbl,fullfile(dpathexcel,'Fig5.xlsx'),'Sheet',[Params.brainareas{thisarea},'_',Params.predstrs{thispred}])
 
         pval= [];
         for thistimebin = 1:numframes % one-sample ttest for each timebin
@@ -124,16 +117,17 @@ for thisarea = 1:numel(Params.brainareas)
     lat3 = nan;
 
     if thisepochtype == 3
-        resplat = median(catpad(2,beh.resplat{1,...
-            animalselect}),[1,2],'omitnan');
-
+        resplat=cellfun(@(x) median(x,'omitnan'),beh.resplat(1,animalselect),'UniformOutput',false);
+        resplat = median(cell2mat(resplat));
+        
         lat1 = resplat;
         lat2 = rewlat(1);
         lat3 = lat2 + rewlat(2);
 
     elseif thisepochtype == 1
-        resplat = median(catpad(2,beh.resplat{4,...
-            animalselect}),[1,2],'omitnan');
+         resplat=cellfun(@(x) median(x,'omitnan'),beh.resplat(4,animalselect),'UniformOutput',false);
+        resplat = median(cell2mat(resplat));
+        
         lat1= resplat;
     end
 
@@ -157,7 +151,12 @@ for thisarea = 1:numel(Params.brainareas)
     xticks(1:5:numframes)
     xticklabels(-bfeventframes*Params.timebinlength/1000:afeventframes*Params.timebinlength/1000)
     ylim([-5,15])
-    setFig
+    set(gca,'fontname','arial')
+    set(gca,'linewidth',1.4)
+    set(gca,'fontsize',12)
+    set(gca,'TickDir','out');
+    set(gca,'box','off')
+
     xlabel('Time (s)')
     ylabel('Coefficient of Partial Determination (%)')
 

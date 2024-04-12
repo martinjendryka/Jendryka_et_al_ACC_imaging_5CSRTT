@@ -10,7 +10,7 @@ for thisses = 1:size(thisdatalist,1)
     opts.DataLines = [6, Inf];
     opts.Delimiter = ",";
     opts.VariableTypes = ["double", "double", "string"];
-    thisdt = readtable(thisdatalist{thisses,5},opts);
+    thisdt = readtable(thisdatalist{thisses,6},opts);
     %%% check if table begins with "start"
     if ~strcmp(thisdt.Var3(1),"start")
         error('first line of thisdt is not "start"')
@@ -29,10 +29,10 @@ for thisses = 1:size(thisdatalist,1)
     % msec]
     thisdir = thisdatalist{thisses,1};
     newdir = ['timestamp',char(extractBetween(thisdir,'traces','.')),'.dat'];
-    filename = fullfile(thispath_scope,thisdatalist{1,4},newdir);
+    filename = fullfile(thispath_scope,thisdatalist{1,5},newdir);
     if ~exist(filename) % in case of v4 miniscope
         newdir = ['timestamp',char(extractBetween(thisdir,'traces','.')),'.csv'];
-        filename = fullfile(thispath_scope,thisdatalist{1,4},newdir);
+        filename = fullfile(thispath_scope,thisdatalist{1,5},newdir);
         sysclock = 2;% column which has the times of the frames (different from v3 miniscope)
     else
         sysclock = 3; % column which has the times of the frames (in v3 miniscope)

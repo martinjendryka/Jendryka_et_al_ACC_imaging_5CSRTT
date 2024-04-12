@@ -11,7 +11,7 @@ varlist.spatialmap = cell(1,size(datalist,1));
 
 novarsessions = {};
 missingsessions = {};
-thisexp= unique(datalist(:,4));
+thisexp= unique(datalist(:,5));
 for i = 1:numel(datalist(:,1))
     lastwarn('')
     sigfn = [];
@@ -38,7 +38,7 @@ varlist.taskname = datalist(:,4)';
 
 % number of cells for each session
 varlist.ncells = cellfun('size',varlist.casig,1);
-varlist.brainarea = datalist(:,6)';
+varlist.brainarea = datalist(:,7)';
 varlist.info = [varlist.animalnames;varlist.brainarea;varlist.taskname;varlist.expdate;num2cell(varlist.ncells)];
 
 end

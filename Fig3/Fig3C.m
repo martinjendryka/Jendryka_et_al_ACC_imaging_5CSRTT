@@ -30,12 +30,12 @@ end
 
 xvalue_std = [xvalues, fliplr(xvalues)];
 
-thisepochstrs = char(epochtypes(thisepochtype));
+thisepochstrs = char(Params.epochtypes(thisepochtype));
 
 A=[8 12 16]; % three sizes for p=0.05, p=0.01, p =0.001, p= 0.0001
 clrsEpochs = [0 1 0;... % green
     ];
-thisarea = 1:numel(brainareas);
+thisarea = 1;
 animalselect = find(ismember(varlist.brainareas,Params.brainareas(thisarea))); % get indices for animals with same brain area
 
 rewlat = median(vertcat(beh.rewlat{animalselect}),1,'omitnan');
@@ -51,11 +51,8 @@ allcmbstrs = [];
 d=0;
 
 thisbinaryclassifier = 1; % correct vs incorrect classifier
-cmbstr = horzcat(trialtypes{trialcombs(thisbinaryclassifier,:)});
+cmbstr = horzcat(Params.trialtypes{Params.trialcombs(thisbinaryclassifier,:)});
 allcmbstrs = [allcmbstrs,cellstr(cmbstr)];
-daCat=[];
-daCatShuffled = [];
-
 
 da = [];
 daShuffled = [];
@@ -64,16 +61,16 @@ animalsExport ={};
 brainExport = {};
 taskExport = {};
 
-for thisanimal = 1:size(pdecod{thisarea},3)
-    thisda = pdecod{thisarea}{thisepochtype,thisbinaryclassifier,thisanimal}; % thisses X timebins X iterations
-    thisdaShuffled = pdecodShuffled{thisarea}{thisepochtype,thisbinaryclassifier,thisanimal};
+for thisanimal = animalselect
+    thisda = pdecod{thisepochtype,thisbinaryclassifier,thisanimal}; % thisses X timebins X iterations
+    thisdaShuffled = pdecodShuffled{thisepochtype,thisbinaryclassifier,thisanimal};
 
     if ~isempty(thisda)
         animalsExport(counter) = animals(thisanimal);
         brainExport(counter) = areas(thisanimal);
         taskExport(counter) = cellstr(task(thisanimal));
-        da(:,:,counter) = mean(thisda,2); % average across iterations
-        daShuffled(:,:,counter) = mean(thisdaShuffled,2);
+        da(:,counter) = mean(thisda,2); % average across iterations
+        daShuffled(:,counter) = mean(thisdaShuffled,2);
         counter = counter +1;
     end
 end
@@ -82,12 +79,11 @@ if isempty(da)
     counter2= counter2 + 1;
 
 else
-    tblexport = table(animalsExport',taskExport',brainExport','VariableNames',{'animals','task','brainarea'});
-    tblexport = [tblexport,array2table((squeeze(da))')];
-    writetable(tblexport,fullfile(dpathexcel,['Fig3A_B_'  '.xlsx']),'Sheet',[char(join(trialtypes(trialcombs(thisbinaryclassifier,:)))),brainareas{thisarea}])
-
-    da = squeeze(da);
-    daShuffled= squeeze(daShuffled);
+    true_shuffle_label = [repelem({'real'},numel(animalsExport),1);...
+        repelem({'shuffle'},numel(animalsExport),1)];
+    tbl_ = table(repmat(animalsExport,1,2)',repmat(taskExport,1,2)',repmat(brainExport,1,2)',true_shuffle_label,'VariableNames',{'animals','task','brainarea','real/shuffle'});
+    tblexport = [tbl_,array2table([da';daShuffled'])];
+    writetable(tblexport,fullfile(dpathexcel,['Fig3C_'  '.xlsx']),'Sheet',[char(join(Params.trialtypes(Params.trialcombs(thisbinaryclassifier,:)))),Params.brainareas{thisarea}])
 
     %%% plot averages
     daAvg = mean(da,2,'omitnan'); % average across animals
@@ -170,16 +166,15 @@ lat2 = nan;
 lat3 = nan;
 
 if thisepochtype == 3
-    resplat = median(catpad(2,beh.resplat{1,...
-        ismember(varlist.brainareas,brainareas(thisarea))}),[1,2],'omitnan');
-
+         resplat = cell2mat(cellfun(@(x) median(x,'omitnan'),beh.resplat(1,animalselect),'UniformOutput',false));
+        resplat = median(resplat);
     lat1 = resplat;
     lat2 = rewlat(1);
     lat3 = lat2 + rewlat(2);
 
 elseif thisepochtype == 1
-    resplat = median(catpad(2,beh.resplat{4,...
-        ismember(varlist.brainareas,brainareas(thisarea))}),[1,2],'omitnan');
+    resplat = cell2mat(cellfun(@(x) median(x,'omitnan'),beh.resplat(4,animalselect),'UniformOutput',false));
+        resplat = median(resplat);
     lat1= resplat;
 end
 
@@ -195,8 +190,8 @@ end
 xline(zeroline+lat2/Params.timebinlength,'LineWidth',1)
 xline(zeroline+lat3/Params.timebinlength,'LineWidth',1)
 
-xticklabels(-bfeventframes*timebinlength/1000:afeventframes*timebinlength/1000)
-legend(h,repmat(cellstr(cmbstr),1,2),'Location','northeastoutside')
+xticklabels(-bfeventframes*Params.timebinlength/1000:afeventframes*Params.timebinlength/1000)
+% legend(repmat(cellstr(Params.cmbstr),1,2),'Location','northeastoutside')
 
 set(gca,'fontname','arial')
 set(gca,'linewidth',0.8)
@@ -207,7 +202,7 @@ set(gca,'box','off')
 xlabel('Time relative to task event (s)')
 ylabel('Decoding accuracy (%)')
 
-fname= fullfile(dpath,['Fig3C_',char(epochtypes(thisepochtype))]);
+fname= fullfile(dpath,['Fig3C_',char(Params.epochtypes(thisepochtype))]);
 
 print(gcf,'-vector','-dpdf',[fname,'.pdf'])
 

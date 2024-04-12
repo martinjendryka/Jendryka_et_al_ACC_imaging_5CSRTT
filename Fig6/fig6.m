@@ -22,25 +22,25 @@ for thisexp = 1:numel(explist)
     dpath = Choosesavedir('outputvars');
     load(fullfile(dpath,'binaryClassifier', thisexpname ,['binaryClassifier_4sbf7saf_' thisexpname '.mat']))
     da_area={};
+    thisarea=1;
+    selectanimals = ismember(infovar.brainareas,Params.brainareas(thisarea));
+    animals = [animals,infovar.animals(selectanimals)];
+    brainareas =[brainareas,infovar.brainareas(selectanimals)];
+    task = [task,infovar.task(selectanimals)];
+    rewlat = cellfun(@(x) median(x,1,'omitnan'), beh.rewlat(selectanimals),'UniformOutput',false);
+    rewlat = median(cat(1,rewlat{:}),1);
+    resplat= cellfun(@(x) median(x,'omitnan'),beh.resplat(1,selectanimals),'UniformOutput',false);
+    resplat = median(cell2mat(resplat));
+    rewlatAll(thisexp,:,thisarea) = rewlat;
+    resplatAll(thisexp,thisarea) = resplat;
+    da_comb={};
 
-    for thisarea = 1:numel(Params.brainareas)
-        selectanimals = ismember(infovar.brainareas,Params.brainareas(thisarea));
-        animals = [animals,infovar.animals(selectanimals)];
-        brainareas =[brainareas,infovar.brainareas(selectanimals)];
-        task = [task,infovar.task(selectanimals)];
-        rewlat = median(vertcat(beh.rewlat{selectanimals}),1,'omitnan');
-        resplat = median(catpad(2,beh.resplat{1,...
-            selectanimals}),[1,2],'omitnan');
-        rewlatAll(thisexp,:,thisarea) = rewlat;
-        resplatAll(thisexp,thisarea) = resplat;
-        da_comb={};
-
-        for thiscomb = 1:size(Params.trialcombs,1)
-            da = cellfun(@(x) mean(x,2,'omitnan'), squeeze(classifier.pdecod(thisepochtype,thiscomb,selectanimals)),'UniformOutput',false); % mean across iterations
-            da_comb(:,thiscomb) = da;
-        end
-        da_area =[da_area;da_comb];
+    for thiscomb = 1:size(Params.trialcombs,1)
+        da = cellfun(@(x) mean(x,2,'omitnan'), squeeze(classifier.pdecod(thisepochtype,thiscomb,selectanimals)),'UniformOutput',false); % mean across iterations
+        da_comb(:,thiscomb) = da;
     end
+    da_area =[da_area;da_comb];
+
     da_combAll = [da_combAll;da_area];
 end
 tbl = sortrows([animals',task',brainareas'],[2,3,1]);

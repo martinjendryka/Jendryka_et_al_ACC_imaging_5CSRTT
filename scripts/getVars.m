@@ -5,9 +5,6 @@ timeafevent = [7000,1000,7000,1000];%[ms]
 %% SET PARAMETERS ABOVE AS REQUIRED %%%%%%%%%%
 setparams % do not change these variables
 
-%% set the experiments you want to process
-explist = {'varITILong','cb800ms','cbDeval1','cbExt1','cbExt2','mixedChalls'};
-
 for thisexp = 1:numel(explist)
     %%% get files for loading
     dpath = Choosesavedir('outputvars');
@@ -36,17 +33,15 @@ for thisexp = 1:numel(explist)
             thisfile = fullfile(dpath, filelist{thisses});
             load(thisfile,'varlist','eventlist')
 
-            setvars % set some variables from varlist
-            setvarsforfunc % set some variables from Params
             %--------- vars over all sessions -----------------------------------------
-            animals = [animals,thisanimal];
-            expdates = [expdates,thisdate];
-            ncellsAll = [ncellsAll,numcells];
-            brainareasAll = [brainareasAll,cellstr(thisregion)];
-            taskAll = [taskAll,string(thistask)];
-            reclengthAll = [reclengthAll,ts];
+            animals = [animals,varlist.animalnames];
+            expdates = [expdates,varlist.expdate];
+            ncellsAll = [ncellsAll,varlist.ncells];
+            brainareasAll = [brainareasAll,varlist.brainarea];
+            taskAll = [taskAll,varlist.taskname];
+            reclengthAll = [reclengthAll,size(varlist.casig{1},2)];
             eventlistAll = [eventlistAll,eventlist];
-            casigAll = [casigAll,{casig}];
+            casigAll = [casigAll,varlist.casig];
 
             %==========================================================================
 
@@ -55,9 +50,9 @@ for thisexp = 1:numel(explist)
             numevents = cat(1,numevents{:});
             beh.numevents(:,thisses) = numevents;
             resplat_type = {};
-            pokes = cell(1,numel(trialtypes)); % which poke the animal used
+            pokes = cell(1,numel(Params.trialtypes)); % which poke the animal used
 
-            for thistrialtype = 1:numel(trialtypes)
+            for thistrialtype = 1:numel(Params.trialtypes)
                 %%% get behavior variables for each session
                 responsetimes = eventlist.eventtime{thistrialtype};
 
@@ -72,19 +67,19 @@ for thisexp = 1:numel(explist)
                 end
 
                 if ~isempty(eventlist.eventstrs{thistrialtype})
-                    pokes{thistrialtype} = categorical(eventlist.eventstrs{thistrialtype}(:,3),poketypes);
+                    pokes{thistrialtype} = categorical(eventlist.eventstrs{thistrialtype}(:,3),Params.poketypes);
                 end
 
-            end % end for-loop through trialtypes
+            end % end for-loop through Params.trialtypes
             beh.resplat(:,thisses) = resplat_type;
             beh.rewlat{:,thisses} = [rewlat,rewoutlat];
             beh.pokes(:,thisses) = pokes;
 
             a = cellfun(@(x) groupcounts(x,'IncludeEmptyGroups',true),pokes,'UniformOutput',false);
-            a{3}= zeros(numel(poketypes),1); % make omission zero cell with same length
+            a{3}= zeros(numel(Params.poketypes),1); % make omission zero cell with same length
             id = find (numevents == 0);
             if ~isempty(id)  && ~(id ==3)
-                a{id} = zeros(numel(poketypes),1);
+                a{id} = zeros(numel(Params.poketypes),1);
             end
             beh.pokesnum(:,:,thisses) = transpose(cell2mat(a));
 
@@ -94,7 +89,7 @@ for thisexp = 1:numel(explist)
             % for export to mat file
             eventepochsAll{thisses} = eventepochs;
             eventepochsAll_pokes{thisses} = eventepochs_pokes;
-            fprintf('%s %s finished \n',thisanimal{1},thisdate{1})
+            fprintf('Session %s %s finished \n',varlist.animalnames{1}, explist{thisexp})
         end % end for-loop through sessions
 
         infovar.animals = animals;
@@ -103,9 +98,8 @@ for thisexp = 1:numel(explist)
         infovar.brainareas = brainareasAll;
         infovar.reclength = reclengthAll;
         infovar.task = taskAll;
-        infovar.dose = doseAll;
         infovar.casig = casigAll;
-        infovar.info = [animals;expdates;brainareasAll;reclengthAll;taskAll;doseAll;num2cell(ncellsAll)];
+        infovar.info = [animals;expdates;brainareasAll;num2cell(reclengthAll);taskAll;num2cell(ncellsAll)];
 
         % save outputs as mat files
         dpath = Choosesavedir('outputvars');
@@ -118,3 +112,5 @@ for thisexp = 1:numel(explist)
         clearvars -except explist Params thisexp
     end
 end
+
+clearvars -except explist

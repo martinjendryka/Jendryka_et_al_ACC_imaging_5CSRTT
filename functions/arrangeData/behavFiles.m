@@ -27,12 +27,12 @@ for i = 1: length(inputList(:,1))
     if ~isempty(ses)
         sesname = ses.name;
         behavfile = fullfile(behav,sesname);
-        inputList(i,5) = {behavfile};
+        inputList(i,6) = {behavfile};
         % add brain area
         if ismember(thisanimal,animalPFC)
-            inputList(i,6) = {'mPFC'};
+            inputList(i,7) = {'mPFC'};
         elseif ismember(thisanimal,animalACC)
-            inputList(i,6) = {'ACC'};
+            inputList(i,7) = {'ACC'};
         else
             error(['no brainarea for animal' thisanimal])
         end

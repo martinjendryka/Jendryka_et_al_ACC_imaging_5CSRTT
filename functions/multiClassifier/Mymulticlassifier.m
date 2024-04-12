@@ -1,6 +1,6 @@
 % dataset is partitioned into training and test sets, classfier is a linear
 % svm
-function  [pdecodAll, fscoreAll,betaAll,fprAll,tprAll,aucAll] = Mymulticlassifier(set,setlabel,Params,info,thisses,numeventtypes,doshuffle)
+function  [pdecodAll, fscoreAll,betaAll,fprAll,tprAll,aucAll] = Mymulticlassifier(set,setlabel,Params,info,thisses,numeventtypes,epochtype,doshuffle)
 
 ncells = info.ncells(thisses);
 animal = info.animals{thisses};
@@ -21,7 +21,7 @@ betaAll = cell(1,numel(Params.epochtypes));
 k = Params.smoteNeighbors; % number of neighbors for used in SMOTE, BE AWARE that in smote function k = k+1
 poketypes = {'poke_1','poke_2','poke_3','poke_4','poke_5'};
 
-for thisepochtype = 1:numel(Params.epochtypes)
+for thisepochtype = epochtype
     numframes = Params.frames.num(thisepochtype);
 
     y = setlabel;

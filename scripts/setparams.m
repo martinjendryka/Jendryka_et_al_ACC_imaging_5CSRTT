@@ -26,9 +26,9 @@ end
 Params.nCluster = 4;
 
 %% classifier
-Params.dosmote = [];
-Params.MLiterations = [];
-Params.ratio = [];
+Params.dosmote = 1;
+Params.MLiterations = 100;
+Params.ratio = 0.2;
 
 Params.trialcombs = flip(combnk(1:numel(Params.trialtypes),2));
 

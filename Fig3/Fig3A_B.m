@@ -72,8 +72,8 @@ for thisarea = 1:numel(Params.brainareas) % for-loop through brain areas
                 animalsExport(counter) = varlist.animals(thisanimal);
                 brainExport(counter) = varlist.brainareas(thisanimal);
                 taskExport(counter) = cellstr(varlist.task(thisanimal));
-                da(:,:,counter) = mean(thisda,2); % average across iterations
-                daShuffled(:,:,counter) = mean(thisdaShuffled,2);
+                da(:,counter) = mean(thisda,2); % average across iterations
+                daShuffled(:,counter) = mean(thisdaShuffled,2);
                 counter = counter +1;
             end
         end
@@ -84,13 +84,12 @@ for thisarea = 1:numel(Params.brainareas) % for-loop through brain areas
         else
             %%% stores the decoding accuracies in a table and exports it to
             %%% excel
-            tblexport = table(animalsExport',taskExport',brainExport','VariableNames',{'animals','task','brainarea'});
-            tblexport = [tblexport,array2table((squeeze(da))'),array2table((squeeze(daShuffled))')];
+            true_shuffle_label = [repelem({'real'},numel(animalsExport),1);...
+                repelem({'shuffle'},numel(animalsExport),1)];
+            tbl_ = table(repmat(animalsExport,1,2)',repmat(taskExport,1,2)',repmat(brainExport,1,2)',true_shuffle_label,'VariableNames',{'animals','task','brainarea','real/shuffle'});
+            tblexport = [tbl_,array2table([da';daShuffled'])];
             writetable(tblexport,fullfile(dpathexcel,['Fig3A_B_'  '.xlsx']),'Sheet',[char(join(Params.trialtypes(Params.trialcombs(thisbinaryclassifier,:)))),Params.brainareas{thisarea}])
-
-            da = squeeze(da);
-            daShuffled= squeeze(daShuffled);
-
+            
             %%% make line plots with shaded errors
 
             daAvg = mean(da,2,'omitnan'); % average across animals
@@ -172,16 +171,17 @@ for thisarea = 1:numel(Params.brainareas) % for-loop through brain areas
     lat3 = nan;
 
     if thisepochtype == 3
-        resplat = median(catpad(2,beh.resplat{1,...
-            ismember(varlist.brainareas,Params.brainareas(thisarea))}),[1,2],'omitnan');
+        resplat = cell2mat(cellfun(@(x) median(x,'omitnan'),beh.resplat(1,animalselect),'UniformOutput',false));
+        resplat = median(resplat);
 
         lat1 = resplat;
         lat2 = rewlat(1);
         lat3 = lat2 + rewlat(2);
 
     elseif thisepochtype == 1
-        resplat = median(catpad(2,beh.resplat{4,...
-            ismember(varlist.brainareas,Params.brainareas(thisarea))}),[1,2],'omitnan');
+        resplat = cell2mat(cellfun(@(x) median(x,'omitnan'),beh.resplat(4,animalselect),'UniformOutput',false));
+        resplat = median(resplat);
+
         lat1= resplat;
     end
 
@@ -210,7 +210,7 @@ for thisarea = 1:numel(Params.brainareas) % for-loop through brain areas
     if thisarea ==1
         fname= fullfile(dpath,['Fig3A_',char(Params.epochtypes(thisepochtype))]);
     else
-        fname= fullfile(dpath,'Fig3B_',char(Params.epochtypes(thisepochtype)));
+        fname= fullfile(dpath,['Fig3B_',char(Params.epochtypes(thisepochtype))]);
     end
     print(gcf,'-vector','-dpdf',[fname,'.pdf'])
 end

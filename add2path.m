@@ -15,7 +15,7 @@ end
 userpath(fileread('userpath.txt'))
 %% create folders where raw data is saved
 
-expnames = {'varITILong','cb800ms','cbDeval1','cbExt1','cbExt2'};
+expnames = {'varITI','cb800ms','cbDeval1','cbExt1','cbExt2','mixedChalls'};
 
 for thisexp = 1:numel(expnames)
         mkdir(fullfile(userpath,"data","miniscope",expnames{thisexp})) % insert calcium imaging data into the folder matching the experiment name

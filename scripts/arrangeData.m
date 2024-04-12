@@ -12,8 +12,8 @@ datalist = collectDirs(thispath_scope);
 datalist = behavFiles(datalist,thispath_beh);
 
 for i = 1:numel(explist)
-    thisexpname = explist{i};
-    thisdatalist = datalist(ismember(datalist(:,4),thisexpname),:);
+    thisexpname = explist(i);
+    thisdatalist = datalist(ismember(datalist(:,5),thisexpname),:);
 
     %% ================================= Load calcium traces ==================
     [varlist,thisdatalist]=Loadrawsignal(thisdatalist,thispath_scope);
@@ -32,7 +32,8 @@ for i = 1:numel(explist)
     mkdir(dpath)
 
     exportSglSes(varlist,eventlist,dpath)
-    fprintf('Experiment %s done \n',expname{i})
-    clearvars -except explist datalist thisexpname
+    fprintf('Experiment %s done \n',explist{i})
+    clearvars -except explist datalist thisexpname thispath_scope
 
 end
+clearvars -except explist

@@ -3,7 +3,7 @@
 %%%
 
 %% 1. LOAD MAT FILE created in getVars.m
-thisexpname = 'varITILong'; % name of challenge
+thisexpname = 'varITI'; % name of challenge
 dpath = Choosesavedir('outputvars'); % gets directory where mat files are stored
 dpath = fullfile(dpath, 'getVars', thisexpname); % specifies which mat file from which challenge should be loaded
 load(fullfile(dpath, ['getVars_4sbf7saf_' thisexpname '.mat'])) % loads mat file
