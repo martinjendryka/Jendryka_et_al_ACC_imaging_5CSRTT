@@ -42,9 +42,9 @@ for thisexp = 1:numel(explist)
 
         %%% Run Regression
         if dopredmerge
-        cpd_thisses =  LinearRegressPredmerged(thisx,thisy,Params,numcells,labels);
+        cpd_thisses =  LinearRegressPredmerged(thisx,thisy,Params,numcells,labels,epochtype);
         else
-        cpd_thisses =  LinearRegress(thisx,thisy,Params,numcells,labels);
+        cpd_thisses =  LinearRegress(thisx,thisy,Params,numcells,labels,epochtype);
         end
         cpd(:,thisses) = cpd_thisses;
         fprintf('%s %d out of %d finished \n',animals{thisses},thisses,numel(animals))
@@ -53,5 +53,5 @@ for thisexp = 1:numel(explist)
     regressvar.cpd = cpd;
     save(fullfile(dpath,[exportname, '_', extractAfter(loadmatname,'_'),'_',thisexpname '.mat']),'Params','regressvar');
     fprintf('Experiment %s done \n',thisexpname)
-    clearvars -except loadmatname explist thisexp exportname
+    clearvars -except loadmatname explist thisexp exportname epochtype dopredmerge
 end

@@ -35,7 +35,9 @@ multiClassifierAnalysis
 fig4
 
 %% Encoding analysis
+explist={'varITI'};
 dopredmerge = 1;
+epochtype=3;
 regressAnalysis
 dopredmerge = 0;
 regressAnalysis
@@ -51,6 +53,7 @@ fig6
 regressAnalysis_dsToChall
 dopredmerge = 1;
 explist = {'cbExt1','cbExt2','cbDeval1'};
+epochtype=3;
 regressAnalysis
 %% Fig.7 Encoding of reward and action in ACC depends on relative value and  
 fig7

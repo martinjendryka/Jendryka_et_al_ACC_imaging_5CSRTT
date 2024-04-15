@@ -14,7 +14,7 @@ for thisexp = 1:numel(explist)
 
     %%% dont change these parameters
     Params.dosmote = 1;
-    Params.MLiterations = 2;
+    Params.MLiterations = 100;
     Params.ratio = 0.2;
     Params.smoteNeighbors = 4;
     Params.mineventsClass = 6; % minimum trial number for one eventtype
