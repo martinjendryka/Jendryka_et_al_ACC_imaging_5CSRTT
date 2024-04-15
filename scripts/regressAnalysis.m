@@ -1,4 +1,3 @@
-explist = {'varITI'};
 loadmatname = 'getVars_4sbf7saf'; % mat file of descr Analysis
 if dopredmerge
     exportname='regressAnalysisPredmerged';
@@ -54,5 +53,5 @@ for thisexp = 1:numel(explist)
     regressvar.cpd = cpd;
     save(fullfile(dpath,[exportname, '_', extractAfter(loadmatname,'_'),'_',thisexpname '.mat']),'Params','regressvar');
     fprintf('Experiment %s done \n',thisexpname)
-    clearvars -except loadmatname explist thisexp
+    clearvars -except loadmatname explist thisexp exportname
 end

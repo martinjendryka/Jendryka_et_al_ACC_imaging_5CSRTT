@@ -49,7 +49,9 @@ fig6
 
 %% Encoding analysis of devaluation experiments
 regressAnalysis_dsToChall
-
+dopredmerge = 1;
+explist = {'cbExt1','cbExt2','cbDeval1'};
+regressAnalysis
 %% Fig.7 Encoding of reward and action in ACC depends on relative value and  
 fig7
 

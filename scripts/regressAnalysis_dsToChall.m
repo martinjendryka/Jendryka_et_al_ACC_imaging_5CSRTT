@@ -7,13 +7,13 @@ dpath = fullfile(dpath, 'getVars', thisexpname);
 load(fullfile(dpath, [loadmatname '_' thisexpname '.mat'])) %
 
 thisarea=1;
+epochtype =3;
 animalselect = find(ismember(infovar.brainareas,Params.brainareas(thisarea)));
-animals = infovar.animals(animalselect);
-dpath = Choosesavedir('outputvars');
-dpath = fullfile(dpath, 'regressAnalysis' ,thisexpname); % where mat files are stored
-mkdir(dpath)
+dpath_save = Choosesavedir('outputvars');
+dpath_save = fullfile(dpath_save, 'regressAnalysis' ,thisexpname); % where mat files are stored
+mkdir(dpath_save)
 
-for otherexp_idx = 2:numel(explist)
+for otherexp_idx = 1:numel(explist)
     otherexp = explist{otherexp_idx};
     dpath = Choosesavedir('outputvars');
 
@@ -26,20 +26,19 @@ for otherexp_idx = 2:numel(explist)
 
     matexportname = ['regressAnalysis_', extractAfter(loadmatname,'_'),'_dsTo_',otherexp];
     
-    %cpd_thisses = cell(Params.sampling_iterations,numel(animals));
-    cpd_thisses = cell(2,numel(animals));
+    cpd_thisses = cell(Params.sampling_iterations,numel(animalselect));
 
-    for thisses = 1:numel(animals)   % FOR LOOP START through each session
+    for thisses = animalselect   % FOR LOOP START through each session
 
         eventlist= eventlistAll(thisses);
         eventepochs = eventepochsAll{thisses};
         numevents = beh.numevents(:,thisses);
         pokes = beh.pokes(:,thisses);
         numpokes = beh.pokesnum(:,:,thisses);
-        numcells = ncells(thisses);
+        numcells = infovar.ncells(thisses);
         setlabel = repelem(Params.trialtypes',numevents); % repeats trialtypes names corresponding to event number (if 0 will be not repeated)
 
-        for i = 1:2%Params.sampling_iterations
+        for i = 1:Params.sampling_iterations
 
             %%% downsample to match other challenge
             [eventepochs_ds,numevents_ds,pokes_ds,numpokes_ds] =  Downsample_events_to_match_other(Params,eventepochs,numevents,pokes,numpokes,numevents_otherexp_ACC,numpokes_otherexp_ACC);
@@ -48,7 +47,7 @@ for otherexp_idx = 2:numel(explist)
             [thisx,thisy,Params,labels] = MakeRegressset(Params,eventepochs_ds,numevents_ds,pokes_ds); % get input data for regression
 
             if any(numevents(3)<=2) % if there are not enough omissions, model will be rank deficient due to activePoke predictor
-                fprintf('%s %d out of %d not enough omissions \n',animals{thisses},thisses,numel(animals))
+                fprintf('%s %d out of %d not enough omissions \n',infovar.animals{thisses},thisses,numel(animalselect))
                 continue
             end
 
@@ -58,12 +57,12 @@ for otherexp_idx = 2:numel(explist)
             fprintf('ses %d: %d out of %d iterations finished \n',thisses,i,Params.sampling_iterations)
 
         end
-        fprintf('%s %d out of %d finished \n',animals{thisses},thisses,numel(animals))
+        fprintf('%s %d out of %d finished \n',infovar.animals{thisses},thisses,numel(animalselect))
 
     end %   FOR LOOP END through each session
 
     regressvar.cpd = cpd_thisses;
-    save(fullfile(dpath ,[matexportname '_' thisexpname '.mat']),'Params','regressvar');
+    save(fullfile(dpath_save ,[matexportname '_' thisexpname '.mat']),'Params','regressvar');
     fprintf('Experiment %s done \n',thisexpname)
-    clearvars -except loadmatname explist epochtype
 end
+clear all
