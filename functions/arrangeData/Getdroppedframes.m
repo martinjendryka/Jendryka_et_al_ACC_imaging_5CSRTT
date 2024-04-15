@@ -1,7 +1,6 @@
 function droppedframes = Getdroppedframes(varlist,thisses,thistime,ifi)
 nframes = numel(thistime);
 predTime = transpose(0:ifi:(nframes-1)*ifi);
-% predTime = pycotime;
 clockDiff = thistime-predTime;
 jumps = abs(diff(clockDiff));
 peaks = find(jumps>=ifi);
@@ -16,7 +15,6 @@ for i = 1:numel(peaks)
     end
  
     isover(i) = abs(base)>ifi;
-%     islower(i)= clockDiff(peaks(i))>clockDiff(peaks(i+1));
 end
 droppedframes_ind = peaks(isover);
 
