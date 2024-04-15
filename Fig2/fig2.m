@@ -13,7 +13,7 @@ load(fullfile(dpath, ['getVars_4sbf7saf_' thisexpname '.mat'])) % loads mat file
 % epoch is shown)
 epochtype = 3; 
 
-Fig2A_B(Params,infovar,eventepochsAll,epochtype)
+%Fig2A_B(Params,infovar,eventepochsAll,epochtype)
 
 %% LOAD CLUSTERS
 dpath = Choosesavedir('outputvars'); % gets directory where mat files are stored

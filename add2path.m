@@ -23,3 +23,4 @@ end
 
 mkdir(fullfile(userpath,"data","behavior")) % insert behavioral data into this folder
 
+clear all, clc

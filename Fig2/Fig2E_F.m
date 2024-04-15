@@ -11,7 +11,7 @@ dpath = Choosesavedir('figs');
 dpath = fullfile(dpath,'Fig2');
 rewlat = beh.rewlat; % reward latencies
 
-example_cells = [116,32,430,97;
+example_cells = [32,430,116,97;
     45,167,141,84]; % example cells as shown in Fig.2E,F
 numframes = Params.frames.num(thisepochtype);
 bfeventframes = Params.frames.bfevent(thisepochtype);
@@ -108,7 +108,7 @@ for thisarea = 1:numel(Params.brainareas) % for-loop through brain areas
         axes(ax(i,4))
         xlims = get(ax(i,4), 'XLim');
         ylims = get(ax(i,4), 'YLim');
-        text(xlims(2) + (diff(xlims) * 0.05), mean(ylims), ['cellID ' num2str(example_cells(thisarea,i)), ' cluster' num2str(cluster_exampleCells(i))], 'Rotation', 270,'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom');
+        text(xlims(2) + (diff(xlims) * 0.05), mean(ylims), ['cellID ' num2str(example_cells(thisarea,i))], 'Rotation', 270,'HorizontalAlignment', 'center', 'VerticalAlignment', 'bottom'); % ' cluster' num2str(cluster_exampleCells(i))
 
         for ii = 1:numel(Params.trialtypes)
             set(ax(i,ii),'Box','off')
