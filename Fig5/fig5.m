@@ -11,4 +11,4 @@ load(fullfile(dpath,'regressAnalysis', thisexpname , ['regressAnalysisPredmerged
 %% create Fig.5B_C
 epochtype=3;
 Fig5B_C(Params,infovar,regressvar,beh,epochtype)
-
+clear all

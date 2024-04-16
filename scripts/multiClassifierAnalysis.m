@@ -4,20 +4,12 @@ if includecorrectsonly
 else
     exportname='multiClassifierOnlyCorrects';
 end
-explist = {'varITI'};
 for thisexp = 1:numel(explist)
     %% LOAD MAT FILE: descrAnalysis.mat
     thisexpname = explist{thisexp};
     dpath = Choosesavedir('outputvars');
     dpath = fullfile(dpath, 'getVars', thisexpname);
     load(fullfile(dpath, [loadmatname '_' thisexpname '.mat'])) %
-
-    %%% dont change these parameters
-    Params.dosmote = 1;
-    Params.MLiterations = 100;
-    Params.ratio = 0.2;
-    Params.smoteNeighbors = 4;
-    Params.mineventsClass = 6; % minimum trial number for one eventtype
 
     %%% pre-allocate variable
     pdecod = cell(numel(Params.epochtypes),numel(infovar.animals));

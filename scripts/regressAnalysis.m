@@ -53,5 +53,5 @@ for thisexp = 1:numel(explist)
     regressvar.cpd = cpd;
     save(fullfile(dpath,[exportname, '_', extractAfter(loadmatname,'_'),'_',thisexpname '.mat']),'Params','regressvar');
     fprintf('Experiment %s done \n',thisexpname)
-    clearvars -except loadmatname explist thisexp exportname epochtype dopredmerge
+    clearvars -except loadmatname explist exportname epochtype dopredmerge
 end

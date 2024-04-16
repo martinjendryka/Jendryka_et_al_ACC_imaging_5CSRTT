@@ -1,7 +1,6 @@
 %% SET ACCORDING TO PREVIOUS SCRIPT
 loadmatname = 'getVars_4sbf7saf';
 
-explist = {'cb800ms','cbExt1','cbExt2','cbDeval1'};
 
 for thisexp = 1:numel(explist)
     
@@ -10,12 +9,6 @@ for thisexp = 1:numel(explist)
     dpath = fullfile(dpath, 'getVars', thisexpname);
     load(fullfile(dpath, [loadmatname '_' thisexpname '.mat'])) %
 
-    %%% dont change these parameters
-    Params.MLiterations = 2;
-    Params.ratio = 0.2; % 20% of trials make up test set
-    Params.smoteNeighbors = 4; % number of neigbors SMOTE function uses for over-sampling events from minority class
-    Params.mineventsClass = 6; % minimum trial number for one eventtype
-    
     %%% pre-allocate variable
     pdecod = cell(numel(Params.epochtypes),size(Params.trialcombs,1),numel(infovar.animals));
     fscore = cell(numel(Params.epochtypes),size(Params.trialcombs,1),numel(infovar.animals));

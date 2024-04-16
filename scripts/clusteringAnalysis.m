@@ -1,5 +1,4 @@
 
-explist = {'varITI'};
 
 for thisexp = 1:numel(explist)
     %% load mat file
@@ -17,5 +16,5 @@ for thisexp = 1:numel(explist)
     save(fullfile(dpath, ['clusters_4sbf7saf_' thisexpname '.mat']), 'clusters');
     fprintf('Experiment %s done \n',thisexpname)
 
-    clearvars -except explist thisexp
+    clearvars -except explist
 end

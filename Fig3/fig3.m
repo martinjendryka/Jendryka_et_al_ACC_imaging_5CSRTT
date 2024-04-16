@@ -20,7 +20,7 @@ for thisexp = 1:numel(explist)
         Fig3C(Params,infovar,classifier,beh,thisepochtype)
     end
 
-    clearvars -except thisexp explist
+    clearvars -except explist
 end
 
 

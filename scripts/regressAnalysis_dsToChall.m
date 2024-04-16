@@ -1,4 +1,3 @@
-explist = {'cb800ms','cbDeval1','cbExt1','cbExt2'};
 thisexpname = explist{1};
 loadmatname = 'getVars_4sbf7saf'; % mat file of descr Analysis
 
@@ -7,7 +6,7 @@ dpath = fullfile(dpath, 'getVars', thisexpname);
 load(fullfile(dpath, [loadmatname '_' thisexpname '.mat'])) %
 
 thisarea=1;
-epochtype =3;
+
 animalselect = find(ismember(infovar.brainareas,Params.brainareas(thisarea)));
 dpath_save = Choosesavedir('outputvars');
 dpath_save = fullfile(dpath_save, 'regressAnalysis' ,thisexpname); % where mat files are stored

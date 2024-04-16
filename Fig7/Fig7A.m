@@ -32,7 +32,7 @@ figure
 t= tiledlayout(3,3,'TileSpacing','tight');
 xlabel(t,'Time (s)')
 ylabel(t,'Coefficient of Partial Determination (%)')
-
+counter=1;
 for thispred = 1:numel(predselect)
 
     cpd_pred = squeeze(cpd(predselect(thispred),:,:))';
@@ -50,7 +50,6 @@ for thispred = 1:numel(predselect)
         cpd_task = cpd_pred(ismember(tbl.Task,taskstrs(thistask)) & ismember(tbl.Brainarea,Params.brainareas(thisarea)),:);
         cpd_bl  = cpd_pred(shiftn:n_animals_bl+shiftn-1,:);
         tbl_anova= [[tbl_bl;tbl_task],array2table([cpd_bl;cpd_task])];
-        tbl_anova.AnimalID(1:n_animals_bl) = string(tbl.AnimalID(1:n_animals_bl));
         timeframes = table((1:numframes)',VariableNames="timeframes");
         rm = fitrm(tbl_anova,"Var1-Var56 ~ Task",WithinDesign = timeframes);
         anovatbl = ranova(rm,"WithinModel","timeframes");
@@ -61,7 +60,7 @@ for thispred = 1:numel(predselect)
         writetable(tbl_anova,fullfile(thisdpath,'Fig7_RAW.xlsx'),"Sheet",Params.predstrs{thispred})
         writetable(mc,fullfile(thisdpath,'Fig7_MULTC.xlsx'),"Sheet",Params.predstrs{thispred})
         writetable(anovatbl,fullfile(thisdpath,'Fig7_ANOVA.xlsx'),"Sheet",Params.predstrs{thispred},"WriteRowNames",true)
-
+        
         for i = 1:2
             if i ==1
                 cpd_task = cpd_pred(shiftn:n_animals_bl+shiftn-1,:);
@@ -171,18 +170,19 @@ for thispred = 1:numel(predselect)
             set(gca,'box','off')
         end
 
-        if ismember(numel(ti),[3,6,9])
+        if ismember(counter,[3,6,9])
             text(max(xlim), max(ylim)/2, sprintf(Params.predstrs{predselect(thispred)}), 'FontSize', 10, 'HorizontalAlignment', 'center', 'Rotation', 270);
         end
 
-        if ismember(numel(ti),[1,2,3])
-            title(sprintf('%s vs baseline',taskstrs(thistask)))
+        if ismember(counter,[1,2,3])
+            title(sprintf('%s vs baseline',taskstrs{thistask}))
         end
         xlim([0 numframes])
         xticks(1:5:numframes)
         xticklabels(-bfeventframes*timebinlength/1000:afeventframes*timebinlength/1000)
         ylim([-2,10])
         yticks(-2:2:10)
+        counter = counter +1;
     end
 end
 

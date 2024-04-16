@@ -29,11 +29,11 @@ Params.nCluster = 4;
 Params.dosmote = 1;
 Params.MLiterations = 100;
 Params.ratio = 0.2;
-
 Params.trialcombs = flip(combnk(1:numel(Params.trialtypes),2));
-
+Params.smoteNeighbors = 4; % number of neigbors SMOTE function uses for over-sampling events from minority class
+Params.mineventsClass = 6; % minimum trial number for one eventtype
 %% linear regression
-Params.predstrs = {'activePoke/omission','spatialLocation1','spatialLocation2','spatialLocation3','spatialLocation4','rewarded(correct)Response'};
+Params.predstrs = {'activePoke-omission','spatialLocation1','spatialLocation2','spatialLocation3','spatialLocation4','rewarded(correct)Response'};
 Params.lasso_CV = 10; % k-fold cross-validation of lasso regression
 Params.sampling_iterations = 100; % iterations for repeating downsampling of baseline challenge to devaluation experiments 
 
