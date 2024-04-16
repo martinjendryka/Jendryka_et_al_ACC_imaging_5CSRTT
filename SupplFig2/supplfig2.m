@@ -1,7 +1,7 @@
 %%% Supplementary Fig. 2 Activity in the ACC represents spatial action selection
 %%% Martin Jendryka, 2024
 
-thisexpname = 'varITILong';
+thisexpname = 'varITI';
 %% Suppl. Fig.2A-C
 dpath = Choosesavedir('outputvars');
 dpath2 = fullfile(dpath, 'getVars', thisexpname);

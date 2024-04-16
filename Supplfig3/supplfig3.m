@@ -2,7 +2,7 @@
 % population activity of the ACC and mPFC 
 
 %% LOAD MAT FILE
-thisexpname = 'varITILong'; % data from which challenge to load
+thisexpname = 'varITI'; % data from which challenge to load
 dpath = Choosesavedir('outputvars');
 dpath = fullfile(dpath, 'getVars', thisexpname);
 load(fullfile(dpath, ['getVars_4sbf7saf_' thisexpname '.mat'])) %

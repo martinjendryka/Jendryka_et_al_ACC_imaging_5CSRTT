@@ -59,5 +59,5 @@ regressAnalysis
 fig7
 
 %% Supplementary figures
-supplfig2
-supplfig3
+supplfig2 # suppfig2C correlation values too low
+supplfig3 # done
