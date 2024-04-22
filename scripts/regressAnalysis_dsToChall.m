@@ -25,8 +25,8 @@ for otherexp_idx = 1:numel(explist)
 
     matexportname = ['regressAnalysis_', extractAfter(loadmatname,'_'),'_dsTo_',otherexp];
     
-    cpd_thisses = cell(Params.sampling_iterations,numel(animalselect));
-
+    cpd_all = cell(Params.sampling_iterations,numel(Params.epochtypes),numel(animalselect));
+    
     for thisses = animalselect   % FOR LOOP START through each session
 
         eventlist= eventlistAll(thisses);
@@ -51,7 +51,8 @@ for otherexp_idx = 1:numel(explist)
             end
 
             %%% Run Regression
-            cpd_thisses{i,thisses} =  LinearRegressPredmerged(thisx,thisy,Params,numcells,labels,epochtype);
+            cpd_thisses =  LinearRegressPredmerged(thisx,thisy,Params,numcells,labels,epochtype);
+            cpd_all(i,:,thisses) = cpd_thisses;
 
             fprintf('ses %d: %d out of %d iterations finished \n',thisses,i,Params.sampling_iterations)
 
@@ -60,7 +61,7 @@ for otherexp_idx = 1:numel(explist)
 
     end %   FOR LOOP END through each session
 
-    regressvar.cpd = cpd_thisses;
+    regressvar.cpd = cpd_all;
     save(fullfile(dpath_save ,[matexportname '_' thisexpname '.mat']),'Params','regressvar');
     fprintf('Experiment %s done \n',thisexpname)
 end

@@ -11,11 +11,10 @@ function Fig7A(tbl,Params,rewlatAll,resplatAll,thisepochtype,cpd)
 %%
 
 dpathexcel = Choosesavedir('excel');
-dpathexcel = fullfile(dpathexcel,'Fig7');
+
 dpath = Choosesavedir('figs');
-dpath = fullfile(dpath,'Fig7');
+dpath = fullfile(dpath,'fig7');
 mkdir(dpath)
-mkdir(dpathexcel)
 taskstrs= unique(tbl.Task);
 taskstrs(1) = [];
 

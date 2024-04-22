@@ -4,24 +4,25 @@
 %%
 function  [pdecodAll, fscoreAll,betaAll,fprAll,tprAll,aucAll] = ...
     Mybinaryclassifier(set,setlabel,Params,info,thisses,epochtype,doshuffle)
+rng("default")
 
 ncells = info.ncells(thisses);
 animal = info.animals{thisses};
 
 %% pre-set output variables
-pdecodAll = cell(numel(Params.epochtypes),size(Params.trialcombs,1));
-fscoreAll = cell(numel(Params.epochtypes),size(Params.trialcombs,1));
-fprAll = cell(numel(Params.epochtypes),size(Params.trialcombs,1));
-tprAll = cell(numel(Params.epochtypes),size(Params.trialcombs,1));Params.trialtypes
-aucAll= cell(numel(Params.epochtypes),size(Params.trialcombs,1));
-betaAll = cell(numel(Params.epochtypes),size(Params.trialcombs,1));
+pdecodAll = cell(size(Params.trialcombs,1),numel(Params.epochtypes));
+fscoreAll = cell(size(Params.trialcombs,1),numel(Params.epochtypes));
+fprAll = cell(size(Params.trialcombs,1),numel(Params.epochtypes));
+tprAll = cell(size(Params.trialcombs,1),numel(Params.epochtypes));
+aucAll= cell(size(Params.trialcombs,1),numel(Params.epochtypes));
+betaAll = cell(size(Params.trialcombs,1),numel(Params.epochtypes));
 
 k = Params.smoteNeighbors; % number of neighbors for used in SMOTE
 
 for thisepochtype = epochtype 
     numframes = Params.frames.num(thisepochtype);
 
-    for thisbinaryclassifier = 1: size(Params.trialcombs,1)
+    for thisbinaryclassifier = [2,3] % for CR vs OM and CR vs PM
         if ismember(thisepochtype,2) && any(ismember(thisbinaryclassifier,[3,5,6])) % combs with prematures in cue phase
             continue
         end
@@ -192,21 +193,21 @@ for thisepochtype = epochtype
                 auc(:,thistimebin,i) = thisauc;
             end
             if doshuffle
-                curr_i_string = [' Classifying Permutation Session ' animal ' ' char(Params.epochtypes(thisepochtype)) ' ' classlbls{1} '-' classlbls{2} ' for timebin ' num2str(thistimebin) ' : ' num2str(Params.MLiterations) ' iterations' ];
+                curr_i_string = [' Classifying Permutation Session ' animal ' ' char(Params.epochtypes(thisepochtype)) ' ' classlbls{1} '-' classlbls{2} ' for timebin ' num2str(thistimebin) ' ' num2str(Params.MLiterations) ' iterations' ];
                 fprintf([curr_i_string '\n']);
 
             else
-                curr_i_string = [' Classifying Session ' animal ' ' char(Params.epochtypes(thisepochtype)) ' ' classlbls{1} '-' classlbls{2} ' for timebin ' num2str(thistimebin)  ' : ' num2str(Params.MLiterations) ' iterations'];
+                curr_i_string = [' Classifying Session ' animal ' ' char(Params.epochtypes(thisepochtype)) ' ' classlbls{1} '-' classlbls{2} ' for timebin ' num2str(thistimebin) ' ' num2str(Params.MLiterations) ' iterations'];
                 fprintf([curr_i_string '\n']);
             end
         end
 
-        pdecodAll{thisepochtype,thisbinaryclassifier} = pdecod;
-        fscoreAll{thisepochtype,thisbinaryclassifier} = fscore;
-        betaAll{thisepochtype,thisbinaryclassifier} = beta;
-        aucAll{thisepochtype,thisbinaryclassifier} = auc;
-        fprAll{thisepochtype,thisbinaryclassifier} = fpr;
-        tprAll{thisepochtype,thisbinaryclassifier} = tpr;
+        pdecodAll{thisbinaryclassifier,thisepochtype} = pdecod;
+        fscoreAll{thisbinaryclassifier,thisepochtype} = fscore;
+        betaAll{thisbinaryclassifier,thisepochtype} = beta;
+        aucAll{thisbinaryclassifier,thisepochtype} = auc;
+        fprAll{thisbinaryclassifier,thisepochtype} = fpr;
+        tprAll{thisbinaryclassifier,thisepochtype} = tpr;
     end
 end
 end

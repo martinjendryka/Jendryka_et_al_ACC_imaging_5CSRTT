@@ -1,7 +1,7 @@
 % dataset is partitioned into training and test sets, classfier is a linear
 % svm
 function  [pdecodAll, fscoreAll,betaAll,fprAll,tprAll,aucAll] = Mymulticlassifier(set,setlabel,Params,info,thisses,numeventtypes,epochtype,doshuffle)
-
+rng("default")
 ncells = info.ncells(thisses);
 animal = info.animals{thisses};
 %% options for linear SVM classifier
@@ -40,7 +40,6 @@ for thisepochtype = epochtype
     sizetest = floor(Params.ratio*numel(y));
 
     if rem(sizetest,nclasses) % checks if sizetest is devidable by the number of classes (we want an equal distributed testgroup), if not subtract by the remainder (therefore <20%)
-        %         sizetest = sizetest + (nclasses - rem(sizetest,nclasses));
         sizetest = sizetest - rem(sizetest,nclasses);
     end
 

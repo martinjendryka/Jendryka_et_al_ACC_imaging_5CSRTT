@@ -1,8 +1,8 @@
 loadmatname = 'getVars_4sbf7saf'; %SET ACCORDING TO PREVIOUS SCRIPT
 if includecorrectsonly 
-    exportname = 'multiClassifier';
+    exportname = 'multiClassifierOnlyCorrects';
 else
-    exportname='multiClassifierOnlyCorrects';
+    exportname='multiClassifierAlltrials';
 end
 for thisexp = 1:numel(explist)
     %% LOAD MAT FILE: descrAnalysis.mat
@@ -32,11 +32,12 @@ for thisexp = 1:numel(explist)
         %%% supervised machine-learning using classifier
         %%% Make sets and setlabels
         thisset = TransformTrace_multi(Params,eventepochs);
-        setlabel = vertcat(numpokes{:});
         if includecorrectsonly
             setlabel = numpokes{1};
+        else
+            setlabel = vertcat(numpokes{:});
         end
-        % file name accordingly in line 79
+
         %%% Run classifier
         [pdecod_thisses, fscore_thisses, beta_thisses,~,~,auc_thisses] = ...
             Mymulticlassifier(thisset,setlabel,Params,infovar,thisses,numevents,epochtype,0); % with true labels

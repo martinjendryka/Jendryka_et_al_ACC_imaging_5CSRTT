@@ -1,5 +1,5 @@
-% Fig.7 Encoding of reward and action in ACC depends on relative value and
-% presence of reward
+% Fig.7 Encoding of reward and action in ACC depends on relative value and 
+% presence of reward 
 % Martin Jendryka
 explist = {'cb800ms','cbDeval1','cbExt1','cbExt2'};
 animals=[];
@@ -41,14 +41,20 @@ for thisexp = 1:numel(explist)
         for ind_chall_ds = 1:numel(baseline_ds) % load CPD for each downsampled baseline challenge
             loadmatname2 = [baseline_ds{ind_chall_ds}]; % mat file of classifier Analysis
             load(fullfile(dpath,'regressAnalysis', thisexpname , [loadmatname2 '_' thisexpname '.mat']))
-
+            
             cpd_epoch = squeeze(regressvar.cpd(:,thisepochtype,animalselect));
             emptycells = cell2mat(cellfun(@(x) isempty(x),squeeze(cpd_epoch(1,:,:)),'UniformOutput',false));         % check for empty cells
             animalselect(emptycells) = [];
-            for thisanimal = 1:numel(animalselect)
-                cpd_cat = cpd_epoch(:,thisanimal);
-                cpd_cat = cat(4,cpd_cat{:});
-                cpd_mean = squeeze(mean(cpd_cat,[2,4],'omitnan')); % take mean across iterations and cells
+            for thisanimal = animalselect
+            cpd_cat = cpd_epoch(:,thisanimal);
+            cpd_cat = cat(4,cpd_cat{:});
+            cpd_mean = cellfun(@(x) squeeze(mean(x,[2,4],'omitnan')),cpd_cat,'UniformOutput',false);
+            
+                for i = 1:size( regressvar.cpd,1) % iterate across repetitions
+                    cpd_cat(:,:,:,i) =  regressvar.cpd{i,thisanimal}{thisepochtype};
+                end
+                thiscpd_mean = mean(cpd_cat,4,'omitnan'); % take mean across iterations
+                cpd_mean = squeeze(mean(thiscpd_mean,2,'omitnan')); % take mean across cells
                 cpd = cat(3,cpd,cpd_mean);
             end
             animals = [animals,infovar.animals(animalselect)];

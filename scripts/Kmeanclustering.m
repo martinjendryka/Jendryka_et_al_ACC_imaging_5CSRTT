@@ -28,18 +28,18 @@ for thisarea = 1:numel(Params.brainareas)
                 continue
             else
                 % kmean clustering
-                [assignedClass,~,~,~]  = kmeans(epochs_avgOdd,Params.nCluster,'Replicates',100,'Distance','cosine'); %
+                [assignedClass,~,~,~]  = kmeans(epochs_avgOdd,Params.nCluster,'Replicates',100,'Distance','cosine'); 
                 %%% give clusters new ids corresppnding to peak latencies
                 %%% (essiantial to get same order in heatplots as in paper)
                 assignedClass_new = assignedClass;
                 if thisarea==1
                     assignedClass_new(assignedClass==2) = 3;
-                    assignedClass_new(assignedClass==3) = 2;
-                else
-                    assignedClass_new(assignedClass==1) = 4;
-                    assignedClass_new(assignedClass==2) = 1;
                     assignedClass_new(assignedClass==3) =2;
-                    assignedClass_new(assignedClass==4) =3;
+                else
+                    assignedClass_new(assignedClass==1) = 2;
+                    assignedClass_new(assignedClass==2) = 3;
+                    assignedClass_new(assignedClass==3) =4;
+                    assignedClass_new(assignedClass==4) =1;
                 end
                 [thisclusterid,thiscellid] = sort(assignedClass_new);
                 clusterid(:,thistrialtype,thisepochtype)= thisclusterid;

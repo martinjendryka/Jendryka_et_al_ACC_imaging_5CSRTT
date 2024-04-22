@@ -7,17 +7,17 @@ for thisexp = 1:numel(explist)
     dpath = Choosesavedir('outputvars');
     dpath = fullfile(dpath, 'getVars', thisexpname);
     load(fullfile(dpath, [loadmatname '_' thisexpname '.mat'])) %
-    
-    %%% pre-allocate variable
-    pdecod = cell(numel(Params.epochtypes),size(Params.trialcombs,1),numel(infovar.animals));
-    fscore = cell(numel(Params.epochtypes),size(Params.trialcombs,1),numel(infovar.animals));
-    beta = cell(numel(Params.epochtypes),size(Params.trialcombs,1),numel(infovar.animals));
-    auc = cell(numel(Params.epochtypes),size(Params.trialcombs,1),numel(infovar.animals));
 
-    pdecodShuffled = cell(numel(Params.epochtypes),size(Params.trialcombs,1),numel(infovar.animals));
-    fscoreShuffled = cell(numel(Params.epochtypes),size(Params.trialcombs,1),numel(infovar.animals));
-    betaShuffled = cell(numel(Params.epochtypes),size(Params.trialcombs,1),numel(infovar.animals));
-    aucShuffled = cell(numel(Params.epochtypes),size(Params.trialcombs,1),numel(infovar.animals));
+    %%% pre-allocate variable
+    pdecod = cell(size(Params.trialcombs,1),numel(Params.epochtypes),numel(infovar.animals));
+    fscore = cell(size(Params.trialcombs,1),numel(Params.epochtypes),numel(infovar.animals));
+    beta = cell(size(Params.trialcombs,1),numel(Params.epochtypes),numel(infovar.animals));
+    auc = cell(size(Params.trialcombs,1),numel(Params.epochtypes),numel(infovar.animals));
+
+    pdecodShuffled = cell(size(Params.trialcombs,1),numel(Params.epochtypes),numel(infovar.animals));
+    fscoreShuffled = cell(size(Params.trialcombs,1),numel(Params.epochtypes),numel(infovar.animals));
+    betaShuffled = cell(size(Params.trialcombs,1),numel(Params.epochtypes),numel(infovar.animals));
+    aucShuffled = cell(size(Params.trialcombs,1),numel(Params.epochtypes),numel(infovar.animals));
 
     for thisses = 1:numel(infovar.animals) % start for-loop through sessions
         thisanimal = infovar.animals{thisses};

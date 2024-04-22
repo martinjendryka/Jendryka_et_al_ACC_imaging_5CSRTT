@@ -45,40 +45,30 @@ for thisarea = 1:numel(Params.brainareas)
     thisareastr = Params.brainareas{thisarea};
     animalselect= find(ismember(varlist.brainareas,Params.brainareas(thisarea)));
 
-    % check for empty cells
-    pdecod_epoch = pdecod_alltrials(thisepochtype,animalselect); %  timebins X iterations
-    emptyses =  cell2mat(cellfun(@(x) isempty(x),pdecod_epoch,'UniformOutput',false));
-    animalselect_noempty = animalselect(~emptyses); % remove empty cells
-    rewlat = cellfun(@(x) median(x,1,'omitnan'),beh.rewlat(animalselect_noempty),'UniformOutput',false);
-    rewlat = median(cat(1,rewlat{:}),1);
-    pdecod_epoch = pdecod_alltrials(thisepochtype,animalselect_noempty); %  timebins X iterations
-    pdecod_epochShuffled = pdecodShuffled_alltrials(thisepochtype,animalselect_noempty); %  timebins X iterations
-
-    da = cellfun(@(x) mean(x,2),pdecod_epoch,'UniformOutput',false); % average across iterations
-    daShuffled = cellfun(@(x) mean(x,2),pdecod_epochShuffled,'UniformOutput',false); % average across iterations
-    da_alltrials = cat(2,da{:});
-    daShuffled_alltrials=cat(2,daShuffled{:});
-
-    % for classifier_corrects
-    pdecod_epoch = pdecod_corrects(thisepochtype,animalselect_noempty); %  timebins X iterations
-    pdecod_epochShuffled = pdecodShuffled_corrects(thisepochtype,animalselect_noempty); %  timebins X iterations
-    da = cellfun(@(x) mean(x,2),pdecod_epoch,'UniformOutput',false); % average across iterations
-    daShuffled = cellfun(@(x) mean(x,2),pdecod_epochShuffled,'UniformOutput',false); % average across iterations
-    da_corrects = cat(2,da{:});
-    daShuffled_corrects=cat(2,daShuffled{:});
-
     %%% plot averages
     nexttile
     hold on
     d=0;
-    for i =1:2 
+
+    for i =1:2
         if i==1
-            da=da_alltrials;
-            daShuffled = daShuffled_alltrials;
+            pdecod_epoch = pdecod_alltrials(thisepochtype,animalselect); %  timebins X iterations
+            pdecod_epochShuffled = pdecodShuffled_alltrials(thisepochtype,animalselect);
+
         else
-            da=da_corrects;
-            daShuffled=daShuffled_corrects;
+            pdecod_epoch = pdecod_corrects(thisepochtype,animalselect); %  timebins X iterations
+            pdecod_epochShuffled = pdecodShuffled_corrects(thisepochtype,animalselect);
         end
+
+        emptyses =  cell2mat(cellfun(@(x) isempty(x),pdecod_epoch,'UniformOutput',false));
+        animalselect_noempty = find(~emptyses); % remove empty cells
+        pdecod_epoch =  pdecod_epoch (animalselect_noempty);
+        pdecod_epochShuffled = pdecod_epochShuffled(animalselect_noempty); %  timebins X iterations
+
+        da = cellfun(@(x) mean(x,2),pdecod_epoch,'UniformOutput',false); % average across iterations
+        da = cat(2,da{:});
+        daShuffled = cellfun(@(x) mean(x,2),pdecod_epochShuffled,'UniformOutput',false); % average across iterations
+        daShuffled = cat(2,daShuffled{:});
 
         daAvg = mean(da,2); % average across animals
         daErr = std(da,[],2);
@@ -94,7 +84,7 @@ for thisarea = 1:numel(Params.brainareas)
         errorMinus = avg_traces - errortype;
 
         inBetween = [errorPlus,fliplr(errorMinus)];
-       
+
         fill(xvalue_std,inBetween,clrs_lines(i,:),'linestyle', 'none',...
             'FaceAlpha',0.2);
         plot(xvalues,avg_traces,'LineWidth',1,'Color',clrs_lines(i,:));
@@ -135,7 +125,6 @@ for thisarea = 1:numel(Params.brainareas)
             pvals_sig(thispvals<0.05) = 0.05;
             pvals_sig(thispvals<0.01) = 0.01;
             pvals_sig(thispvals<0.001) = 0.001;
-            pvals_sig(thispvals<0.0001) = 0.0001;
         end
 
         y = 1 + d;
@@ -153,20 +142,23 @@ for thisarea = 1:numel(Params.brainareas)
     xlim([0,numframes])
 
     % add latencies as vertical lines to plot
+    rewlat = cellfun(@(x) median(x,1,'omitnan'),beh.rewlat(animalselect(~emptyses)),'UniformOutput',false);
+    rewlat = median(cat(1,rewlat{:}),1);
+
     lat1 = nan;
     lat2 = nan;
     lat3 = nan;
 
     if thisepochtype == 3
-        resplat = cellfun(@(x) median(x,'omitnan'),beh.resplat(1,animalselect_noempty),'UniformOutput',false);
+        resplat = cellfun(@(x) median(x,'omitnan'),beh.resplat(1,animalselect(~emptyses)),'UniformOutput',false);
         resplat = median(cell2mat(resplat));
-     
+
         lat1 = resplat;
         lat2 = rewlat(1);
         lat3 = lat2 + rewlat(2);
 
     elseif thisepochtype == 1
-           resplat = cellfun(@(x) median(x,'omitnan'),beh.resplat(4,animalselect_noempty),'UniformOutput',false);
+        resplat = cellfun(@(x) median(x,'omitnan'),beh.resplat(4,animalselect(~emptyses)),'UniformOutput',false);
         resplat = median(cell2mat(resplat));
         lat1= resplat;
     end

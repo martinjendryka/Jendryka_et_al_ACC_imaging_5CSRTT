@@ -85,16 +85,11 @@ for thisarea = 1:numel(Params.brainareas) % iterate through brain areas
     for thispoketype = 1:numel(Params.poketypes)
         epochs_avgOdd= epochsOdd_all(:,:,thispoketype);
         epochs_avgEven= epochsEven_all(:,:,thispoketype);
-        %        epochs_avgOdd(isnan(epochs_avgEven)) = nan;
-        %       epochs_avgEven(isnan(epochs_avgOdd)) = nan;
         epochs_avgOddSort = epochs_avgOdd(sortidx,:); % apply sort_idx on cells
         epochs_avgEvenSort = epochs_avgEven(sortidx,:);
 
         %% correlation between heatplots of odd and even trials
-        % epochs_avgOdd2 = reshape(epochs_avgOdd(~isnan(epochs_avgOdd)),[],numframes);
-        %epochs_avgEven2 = reshape(epochs_avgEven(~isnan(epochs_avgEven)),[],numframes);
-
-        %%% correlation between odd and even heat plots (required for Fig. 4C)
+  
         [thisr,thisp] = corrcoef([epochs_avgOdd,epochs_avgEven]);
         thisr2 = diag(thisr(numframes+1:numframes*2,1:numframes)); % select the required correlation values from the matrix
         thisp2 = diag(thisp(numframes+1:numframes*2,1:numframes)); % select the corresponding p values
@@ -193,11 +188,7 @@ for thisarea = 1:numel(Params.brainareas) % iterate through brain areas
     1.00, 0.00, 0.00;  % Red
     1.00, 0.50, 0.00   % Orange
     ];
-    % p_anova = [];
-    % pvals_multc = [];
-    % multc_lbls = [];
-    % r_pokeAll= nan(numframes,size(comb_pokesid,1),numel(poketypes));
-
+   
     for thiscomb = 1:size(comb_pokesid,1) % iterate through number of poketype combinations
         heatplotA = poke_epochs(:,:,comb_pokesid(thiscomb,1));
         heatplotB = poke_epochs(:,:,comb_pokesid(thiscomb,2));
@@ -274,10 +265,10 @@ for thisarea = 1:numel(Params.brainareas) % iterate through brain areas
 
     % Perform multi comparison
     cmpResults = multcompare(rm,'Time','ComparisonType','Dunn-Sidak');
-
+    cmpResults = cmpResults([1,5,9],:);
     %%% excel table for anova
     fname = fullfile(dpathexcel,['Fig4_anova' '.xlsx']);
-    writetable(ranovaResults,fname,'Sheet',['RMANOVA',Params.brainareas{thisarea} '_' char(Params.epochtypes(thisepochtype))],'WriteMode','overwritesheet')
+    writetable(ranovaResults,fname,'Sheet',['RMANOVA',Params.brainareas{thisarea} '_' char(Params.epochtypes(thisepochtype))],'WriteMode','overwritesheet','WriteRowNames',true)
     writetable(cmpResults,fname,'Sheet',['SidakPosthoc',Params.brainareas{thisarea} '_' char(Params.epochtypes(thisepochtype))],'WriteMode','overwritesheet')
     tbl = array2table(thisr_poke);
     tbl.Properties.VariableNames = strcat(comb_pokes(:,1),comb_pokes(:,2));

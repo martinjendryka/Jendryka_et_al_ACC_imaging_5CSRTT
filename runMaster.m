@@ -8,7 +8,7 @@ arrangeData
 %% select times before and after each event (i.e. iti, cue, choice and outcome) for signal extraction
 %%% dont change to reproduce figures of paper
 timebfevent = [0,0,4000,0]; %[ms]
-timeafevent = [7000,1000,7000,1000];%[ms]
+timeafevent = [4000,1000,7000,1000];%[ms]
 
 setparams % do not change these variables
 %% 2. get variables for plotting  
@@ -65,11 +65,10 @@ fig6
 explist = {'cb800ms','cbDeval1','cbExt1','cbExt2'};
 epochtype =3;
 regressAnalysis_dsToChall
-dopredmerge = 1;
 
 %% Fig.7 Encoding of reward and action in ACC depends on relative value and  
 fig7 
 
 %% Supplementary figures
-supplfig2 % suppfig2C correlation values too low
+supplfig2 
 supplfig3 

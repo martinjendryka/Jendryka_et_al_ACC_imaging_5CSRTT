@@ -8,6 +8,7 @@ function Fig6E_F(tbl, Params,rewlatAll,resplatAll,thisepochtype)
 % challenge)
 %%
 dpathexcel = Choosesavedir('excel');
+dpathexcel = fullfile(dpathexcel,'Fig6');
 dpath = Choosesavedir('figs');
 dpath = fullfile(dpath,'Fig6');
 mkdir(dpath)
@@ -114,6 +115,6 @@ for thiscomb = [2,3]
     else
         fname= fullfile(dpath,'Fig6F');
     end
-    print(gcf,'-vector','-dsvg',[fname,'.pdf'])
+    print(gcf,'-vector','-dpdf',[fname,'.pdf'])
 end
 end
